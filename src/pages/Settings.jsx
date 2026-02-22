@@ -17,7 +17,7 @@ import Load from '../api/entities/Load';
 import Expense from '../api/entities/Expense';
 
 const PROFILES = [
-  { value: 'owner_operator', label: 'Owner Operator (Full Gross)' },
+  { value: 'owner_operator', label: 'Owner Operator' },
   { value: 'solo_per_mile', label: 'Solo Driver – Per Mile' },
   { value: 'solo_percentage', label: 'Solo Driver – Percentage' },
   { value: 'team_per_mile', label: 'Team Driver – Per Mile' },
@@ -64,22 +64,38 @@ export default function Settings() {
 
   const saveMutation = useMutation({
     mutationFn: async (data) => {
-      const existing = await AppSettings.list();
-      const payload = {
-        ...data,
-        rate_per_mile: parseFloat(data.rate_per_mile) || 0,
-        percentage_rate: parseFloat(data.percentage_rate) || 0,
-      };
-      if (existing.length > 0) {
-        return AppSettings.update(existing[0].id, payload);
+      try {
+        const existing = await AppSettings.list();
+        const payload = {
+          earning_profile: data.earning_profile || 'owner_operator',
+          rate_per_mile: parseFloat(data.rate_per_mile) || 0,
+          percentage_rate: parseFloat(data.percentage_rate) || 0,
+          dark_mode: Boolean(data.dark_mode),
+          driver_name: data.driver_name || '',
+          company_name: data.company_name || '',
+        };
+        if (existing && existing.length > 0) {
+          return await AppSettings.update(existing[0].id, payload);
+        }
+        return await AppSettings.create(payload);
+      } catch (error) {
+        console.error('Settings save error:', error);
+        throw error;
       }
-      return AppSettings.create(payload);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['settings'] });
-      toast({ title: 'Settings saved', variant: 'success' });
+      if (form.dark_mode) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      toast({ title: 'Settings saved successfully ✓' });
     },
-    onError: () => toast({ title: 'Failed to save settings', variant: 'destructive' }),
+    onError: (error) => {
+      console.error('Settings save failed:', error);
+      toast({ title: 'Failed to save settings', description: error?.message || 'Unknown error', variant: 'destructive' });
+    },
   });
 
   const set = (field, value) => setForm((f) => ({ ...f, [field]: value }));
@@ -108,7 +124,7 @@ export default function Settings() {
       a.download = `truckflow-backup-${moment().format('YYYY-MM-DD')}.json`;
       a.click();
       URL.revokeObjectURL(url);
-      toast({ title: 'Data exported successfully', variant: 'success' });
+      toast({ title: 'Data exported successfully' });
     } catch {
       toast({ title: 'Export failed', variant: 'destructive' });
     }
@@ -160,7 +176,7 @@ export default function Settings() {
       }
 
       queryClient.invalidateQueries();
-      toast({ title: 'Data imported successfully', variant: 'success' });
+      toast({ title: 'Data imported successfully' });
     } catch {
       toast({ title: 'Import failed – invalid file', variant: 'destructive' });
     } finally {
@@ -171,7 +187,10 @@ export default function Settings() {
   };
 
   const isPerMile = form.earning_profile === 'solo_per_mile' || form.earning_profile === 'team_per_mile';
-  const isPercentage = form.earning_profile === 'solo_percentage' || form.earning_profile === 'team_percentage';
+  const isPercentage = form.earning_profile === 'owner_operator' ||
+    form.earning_profile === 'solo_percentage' ||
+    form.earning_profile === 'team_percentage';
+  const isOwnerOperator = form.earning_profile === 'owner_operator';
 
   return (
     <div className="p-6 space-y-6 max-w-2xl">
@@ -218,7 +237,9 @@ export default function Settings() {
 
           {isPercentage && (
             <div>
-              <Label htmlFor="percentage_rate">Percentage Rate (%)</Label>
+              <Label htmlFor="percentage_rate">
+                {isOwnerOperator ? 'Dispatch/Broker Fee (%)' : 'Percentage Rate (%)'}
+              </Label>
               <Input
                 id="percentage_rate"
                 type="number"
@@ -228,7 +249,7 @@ export default function Settings() {
                 value={form.percentage_rate}
                 onChange={(e) => set('percentage_rate', e.target.value)}
                 className="mt-1 max-w-xs"
-                placeholder="e.g., 25"
+                placeholder={isOwnerOperator ? 'e.g., 10 (0 = keep full gross)' : 'e.g., 25'}
               />
             </div>
           )}

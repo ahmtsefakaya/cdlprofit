@@ -30,7 +30,7 @@ const EMPTY_FORM = {
   status: 'Pending',
 };
 
-export function LoadForm({ open, onClose, onSave, initialData }) {
+export function LoadForm({ open, onClose, onSave, initialData, isSaving }) {
   const [form, setForm] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
 
@@ -60,12 +60,22 @@ export function LoadForm({ open, onClose, onSave, initialData }) {
 
   const handleSave = () => {
     if (!validate()) return;
-    onSave({
-      ...form,
+    const payload = {
+      load_id: form.load_id.trim(),
+      broker_name: form.broker_name.trim(),
+      pickup_city: form.pickup_city.trim(),
+      pickup_state: form.pickup_state,
+      delivery_city: form.delivery_city.trim(),
+      delivery_state: form.delivery_state,
+      pickup_date: form.pickup_date,
+      delivery_date: form.delivery_date || null,
       loaded_miles: parseFloat(form.loaded_miles) || 0,
       deadhead_miles: parseFloat(form.deadhead_miles) || 0,
       gross_amount: parseFloat(form.gross_amount) || 0,
-    });
+      notes: form.notes || '',
+      status: form.status || 'Pending',
+    };
+    onSave(payload);
   };
 
   return (
@@ -179,8 +189,10 @@ export function LoadForm({ open, onClose, onSave, initialData }) {
         </div>
 
         <DialogFooter className="mt-4 gap-2">
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleSave}>{initialData ? 'Save Changes' : 'Add Load'}</Button>
+          <Button variant="outline" onClick={onClose} disabled={isSaving}>Cancel</Button>
+          <Button onClick={handleSave} disabled={isSaving}>
+            {isSaving ? 'Saving…' : (initialData ? 'Save Changes' : 'Add Load')}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

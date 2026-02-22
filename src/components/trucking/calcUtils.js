@@ -9,6 +9,9 @@ export function calculateEarnings(load, settings) {
 
   switch (earning_profile) {
     case 'owner_operator':
+      if (percentage_rate && percentage_rate > 0 && percentage_rate < 100) {
+        return (load.gross_amount || 0) * (percentage_rate / 100);
+      }
       return load.gross_amount || 0;
     case 'solo_per_mile':
     case 'team_per_mile':

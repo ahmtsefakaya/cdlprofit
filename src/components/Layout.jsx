@@ -1,12 +1,16 @@
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  LayoutDashboard, Truck, Receipt, BarChart3, Settings, Menu,
+  LayoutDashboard, Truck, Receipt, BarChart3, Settings, Menu, Sun, Moon, LogOut,
 } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { Button } from './ui/button';
 import { useSettings } from './trucking/useSettings';
 import { useEffect } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import AppSettings from '../api/entities/AppSettings';
+import { useAuth } from '../contexts/useAuth';
+import { auth } from '../api/auth';
 
 const NAV_ITEMS = [
   { path: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -41,6 +45,34 @@ function NavLink({ item, onClick }) {
 
 function SidebarContent({ onNavClick }) {
   const { settings } = useSettings();
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const darkModeMutation = useMutation({
+    mutationFn: async (isDark) => {
+      const existing = await AppSettings.list();
+      if (existing && existing.length > 0) {
+        return await AppSettings.update(existing[0].id, { dark_mode: isDark });
+      }
+      return await AppSettings.create({ dark_mode: isDark });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['settings'] });
+    },
+    onError: (error) => {
+      console.error('Failed to save dark mode preference:', error);
+    },
+  });
+
+  const handleDarkToggle = () => {
+    const isDark = !settings.dark_mode;
+    document.documentElement.classList.toggle('dark', isDark);
+    darkModeMutation.mutate(isDark);
+  };
+
+  const handleLogout = () => {
+    auth.logout('/');
+  };
 
   return (
     <div className="flex h-full flex-col bg-primary-800">
@@ -69,9 +101,30 @@ function SidebarContent({ onNavClick }) {
         ))}
       </nav>
 
+      {/* Dark Mode Toggle */}
+      <div className="px-3 py-2 border-t border-white/10">
+        <button
+          onClick={handleDarkToggle}
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-blue-100 hover:bg-white/10 hover:text-white transition-all"
+        >
+          {settings.dark_mode ? <Sun className="h-5 w-5 shrink-0" /> : <Moon className="h-5 w-5 shrink-0" />}
+          {settings.dark_mode ? 'Light Mode' : 'Dark Mode'}
+        </button>
+      </div>
+
       {/* Footer */}
-      <div className="px-4 py-3 border-t border-white/10">
-        <p className="text-xs text-blue-300">CDL Profit Tracker v1.0</p>
+      <div className="px-3 py-3 border-t border-white/10 space-y-2">
+        {user?.email && (
+          <p className="text-xs text-blue-300 px-3 truncate">{user.email}</p>
+        )}
+        <button
+          onClick={handleLogout}
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-blue-100 hover:bg-white/10 hover:text-white transition-all"
+        >
+          <LogOut className="h-4 w-4 shrink-0" />
+          Sign Out
+        </button>
+        <p className="text-xs text-blue-300 px-3">CDL Profit Tracker v1.0</p>
       </div>
     </div>
   );
