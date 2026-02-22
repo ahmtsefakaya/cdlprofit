@@ -7,7 +7,7 @@ import Expenses from './pages/Expenses';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import { Toaster } from './components/ui/toaster';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/authContext';
 import AuthGuard from './components/AuthGuard';
 
 const queryClient = new QueryClient({
