@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { auth } from '../api/auth';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../api/firebase';
 
 const AuthContext = createContext(null);
 
@@ -8,19 +9,11 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is already logged in
-    const checkAuth = async () => {
-      try {
-        const currentUser = await auth.me();
-        setUser(currentUser || null);
-      } catch (error) {
-        console.log('No active session');
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    checkAuth();
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser || null);
+      setLoading(false);
+    });
+    return () => unsubscribe();
   }, []);
 
   return (

@@ -4,7 +4,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { useToast } from '../components/ui/use-toast';
-import { auth } from '../api/auth';
+import { authService } from '../api/auth';
 import { useAuth } from '../contexts/useAuth';
 
 export default function Login() {
@@ -26,9 +26,11 @@ export default function Login() {
     try {
       let user;
       if (mode === 'login') {
-        user = await auth.login(email, password);
+        const result = await authService.login(email, password);
+        user = result.user;
       } else {
-        user = await auth.register({ email, password });
+        const result = await authService.register({ email, password });
+        user = result.user;
       }
       setUser(user);
     } catch (error) {
