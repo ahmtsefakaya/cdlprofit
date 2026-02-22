@@ -7,6 +7,8 @@ import Expenses from './pages/Expenses';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import { Toaster } from './components/ui/toaster';
+import { AuthProvider } from './contexts/AuthContext';
+import AuthGuard from './components/AuthGuard';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,15 +23,19 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/loads" element={<Loads />} />
-            <Route path="/expenses" element={<Expenses />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/settings" element={<Settings />} />
-          </Routes>
-        </Layout>
+        <AuthProvider>
+          <AuthGuard>
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/loads" element={<Loads />} />
+                <Route path="/expenses" element={<Expenses />} />
+                <Route path="/analytics" element={<Analytics />} />
+                <Route path="/settings" element={<Settings />} />
+              </Routes>
+            </Layout>
+          </AuthGuard>
+        </AuthProvider>
         <Toaster />
       </BrowserRouter>
     </QueryClientProvider>

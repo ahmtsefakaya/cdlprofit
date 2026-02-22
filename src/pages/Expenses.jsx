@@ -40,29 +40,38 @@ export default function Expenses() {
     mutationFn: (data) => Expense.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
-      toast({ title: 'Expense added', variant: 'success' });
+      toast({ title: 'Expense added successfully ✓' });
       setFormOpen(false);
     },
-    onError: () => toast({ title: 'Failed to add expense', variant: 'destructive' }),
+    onError: (error) => {
+      console.error('Failed to create expense:', error);
+      toast({ title: 'Failed to add expense', description: error?.message || 'Check console for details', variant: 'destructive' });
+    },
   });
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }) => Expense.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
-      toast({ title: 'Expense updated', variant: 'success' });
+      toast({ title: 'Expense updated successfully ✓' });
       setEditExpense(null);
     },
-    onError: () => toast({ title: 'Failed to update expense', variant: 'destructive' }),
+    onError: (error) => {
+      console.error('Failed to update expense:', error);
+      toast({ title: 'Failed to update expense', description: error?.message || 'Check console for details', variant: 'destructive' });
+    },
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id) => Expense.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
-      toast({ title: 'Expense deleted', variant: 'success' });
+      toast({ title: 'Expense deleted' });
     },
-    onError: () => toast({ title: 'Failed to delete expense', variant: 'destructive' }),
+    onError: (error) => {
+      console.error('Failed to delete expense:', error);
+      toast({ title: 'Failed to delete expense', variant: 'destructive' });
+    },
   });
 
   // Period filter

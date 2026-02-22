@@ -54,32 +54,53 @@ export default function Loads() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) => Load.create(data),
+    mutationFn: async (data) => {
+      console.log('Creating load:', data);
+      const result = await Load.create(data);
+      console.log('Load created:', result);
+      return result;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['loads'] });
-      toast({ title: 'Load added', variant: 'success' });
+      toast({ title: 'Load added successfully ✓' });
       setFormOpen(false);
+      setEditLoad(null);
     },
-    onError: () => toast({ title: 'Failed to add load', variant: 'destructive' }),
+    onError: (error) => {
+      console.error('Failed to create load:', error);
+      toast({ title: 'Failed to add load', description: error?.message || 'Check console for details', variant: 'destructive' });
+    },
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }) => Load.update(id, data),
+    mutationFn: async ({ id, data }) => {
+      console.log('Updating load:', id, data);
+      const result = await Load.update(id, data);
+      console.log('Load updated:', result);
+      return result;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['loads'] });
-      toast({ title: 'Load updated', variant: 'success' });
+      toast({ title: 'Load updated successfully ✓' });
+      setFormOpen(false);
       setEditLoad(null);
     },
-    onError: () => toast({ title: 'Failed to update load', variant: 'destructive' }),
+    onError: (error) => {
+      console.error('Failed to update load:', error);
+      toast({ title: 'Failed to update load', description: error?.message || 'Check console for details', variant: 'destructive' });
+    },
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id) => Load.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['loads'] });
-      toast({ title: 'Load deleted', variant: 'success' });
+      toast({ title: 'Load deleted' });
     },
-    onError: () => toast({ title: 'Failed to delete load', variant: 'destructive' }),
+    onError: (error) => {
+      console.error('Failed to delete load:', error);
+      toast({ title: 'Failed to delete load', variant: 'destructive' });
+    },
   });
 
   const filtered = loads.filter((l) => {
@@ -254,6 +275,7 @@ export default function Loads() {
         onClose={() => { setFormOpen(false); setEditLoad(null); }}
         onSave={handleSave}
         initialData={editLoad}
+        isSaving={createMutation.isPending || updateMutation.isPending}
       />
     </div>
   );
