@@ -1,0 +1,1811 @@
+{
+  "exportDate": "2026-02-22T07:16:49.404Z",
+  "period": "Custom Report (2025-05-01 to 2026-01-31)",
+  "totalLoads": 79,
+  "loads": [
+    {
+      "id": "W0NTzymxk8TkCPIVz2BY",
+      "origin": "Rittmann, oh",
+      "doDate": "2026-01-15",
+      "miles": 385,
+      "loadId": "LDS15237813",
+      "puDate": "2026-01-14",
+      "deadhead": 51,
+      "notes": "",
+      "amount": 270.2,
+      "destination": "Melrose Park, Illinois",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1768424159,
+        "nanoseconds": 547000000
+      },
+      "broker": "Traffic TECH"
+    },
+    {
+      "id": "YF6JBF9PBrt07AzozZc0",
+      "broker": "6927300",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1768340007,
+        "nanoseconds": 840000000
+      },
+      "destination": "ALLIANCE OH",
+      "amount": 585.9,
+      "notes": "",
+      "deadhead": 49,
+      "puDate": "2026-01-12",
+      "loadId": "Landstar",
+      "miles": 837,
+      "doDate": "2026-01-14",
+      "origin": "DAYTON MN"
+    },
+    {
+      "id": "IPKqNBfInb7uWU9OviYr",
+      "amount": 1374.8,
+      "destination": "Rosemount, MN",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1768068610,
+        "nanoseconds": 617000000
+      },
+      "broker": "FLS Transportation",
+      "miles": 1933,
+      "loadId": "005595577",
+      "origin": "Torrance, CA",
+      "doDate": "2026-01-12",
+      "deadhead": 81,
+      "notes": "",
+      "puDate": "2026-01-09"
+    },
+    {
+      "id": "2z6KB195xklvuX9XraNz",
+      "puDate": "2026-01-06",
+      "deadhead": 1.2,
+      "notes": "",
+      "origin": "AUBURN,WASHINGTON",
+      "doDate": "2026-01-08",
+      "miles": 2286,
+      "loadId": "114376",
+      "broker": "KROSLAND",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1767718521,
+        "nanoseconds": 277000000
+      },
+      "amount": 1600.2,
+      "destination": "Los Angeles, CA"
+    },
+    {
+      "id": "rE4YayxNYHK2ckYMkrQe",
+      "broker": "POLARIS",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1767209424,
+        "nanoseconds": 388000000
+      },
+      "destination": "AUBURN, WA",
+      "amount": 1885.1,
+      "puDate": "2025-12-31",
+      "notes": "",
+      "deadhead": 107,
+      "doDate": "2026-01-05",
+      "origin": "JACKSON, AL",
+      "loadId": "0341528",
+      "miles": 2636
+    },
+    {
+      "id": "C1xMW6wbWd8KIXPpgzRR",
+      "destination": "Moss Point, MS",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1767511669,
+        "nanoseconds": 982000000
+      },
+      "amount": 1038.8,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1767209331,
+        "nanoseconds": 642000000
+      },
+      "broker": "ARMSTRONG",
+      "loadId": "4010142",
+      "miles": 1484,
+      "doDate": "2025-12-31",
+      "origin": "Haverhill, MA",
+      "notes": "",
+      "deadhead": 15,
+      "puDate": "2025-12-29"
+    },
+    {
+      "id": "lN5kBOY3igXM7hdoQG7B",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1766535750,
+        "nanoseconds": 794000000
+      },
+      "destination": "Andover, MA",
+      "broker": "Landstar",
+      "loadId": "4638495",
+      "miles": 3057,
+      "doDate": "2025-12-29",
+      "origin": "Placentia, CA",
+      "notes": "",
+      "deadhead": 207,
+      "puDate": "2025-12-23",
+      "amount": 2249.8,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1766501948,
+        "nanoseconds": 548000000
+      }
+    },
+    {
+      "id": "vj6CWfpZ0AbcplXZpkV1",
+      "deadhead": 161,
+      "notes": "",
+      "puDate": "2025-12-20",
+      "miles": 730,
+      "loadId": "2819822",
+      "origin": "MCARTHUR, CA",
+      "doDate": "2025-12-22",
+      "broker": "INTEGRITY",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1766501897,
+        "nanoseconds": 230000000
+      },
+      "amount": 588.7,
+      "destination": "SAN DIEGO, CA"
+    },
+    {
+      "id": "etrWQt0X9qpceOMeQ8Jl",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1766501798,
+        "nanoseconds": 684000000
+      },
+      "destination": "White City, OR",
+      "broker": "ZEV",
+      "migratedFrom": "loads",
+      "amount": 2246.3,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1765900980,
+        "nanoseconds": 405000000
+      },
+      "origin": "Archbald, PA",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "doDate": "2025-12-19",
+      "miles": 3111,
+      "loadId": "ZEVM1783",
+      "puDate": "2025-12-15",
+      "deadhead": 148,
+      "notes": ""
+    },
+    {
+      "id": "pidGasbV4uEUOQ9djnvi",
+      "migratedFrom": "loads",
+      "broker": "Forward Air",
+      "destination": "SWEDESBORO, NJ",
+      "deadhead": 476,
+      "notes": "",
+      "puDate": "2025-12-12",
+      "miles": 2712,
+      "loadId": "0987333",
+      "origin": "SAN DIEGO, CA",
+      "migratedAt": "2025-12-20T22:38:01.427Z",
+      "doDate": "2025-12-15",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1765605929,
+        "nanoseconds": 627000000
+      },
+      "amount": 2196.6
+    },
+    {
+      "id": "ah1CrD17Z8J8WN0BJ9WV",
+      "broker": "ARMSTRONG",
+      "destination": "St. George, UT, 84790",
+      "migratedFrom": "loads",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1765216638,
+        "nanoseconds": 29000000
+      },
+      "amount": 1635.2,
+      "notes": "",
+      "deadhead": 87,
+      "puDate": "2025-12-08",
+      "loadId": "3966518-1",
+      "miles": 2299,
+      "doDate": "2025-12-11",
+      "origin": "Essex, MD, 21221",
+      "migratedAt": "2025-12-20T22:38:01.426Z"
+    },
+    {
+      "id": "oCnkg4sMb4CnCCSPTTDh",
+      "broker": "MoLo",
+      "destination": "Williamsport, MD",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764974770,
+        "nanoseconds": 238000000
+      },
+      "migratedFrom": "loads",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764973596,
+        "nanoseconds": 918000000
+      },
+      "amount": 1450.4,
+      "puDate": "2025-12-05",
+      "notes": "",
+      "deadhead": 17.9,
+      "doDate": "2025-12-08",
+      "origin": "Draper, UT",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "loadId": "2002355207",
+      "miles": 2072
+    },
+    {
+      "id": "qrOigW5T8QDjX4iIba3n",
+      "notes": "",
+      "deadhead": 13,
+      "puDate": "2025-12-04",
+      "loadId": "2907096",
+      "miles": 519,
+      "doDate": "2025-12-05",
+      "origin": "DENVER, CO",
+      "migratedAt": "2025-12-20T22:38:01.427Z",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764872080,
+        "nanoseconds": 931000000
+      },
+      "amount": 363.3,
+      "migratedFrom": "loads",
+      "broker": "AXLE",
+      "destination": "SALT LAKE CITY, UT"
+    },
+    {
+      "id": "izlNTIjip2JiZHX8vmGH",
+      "amount": 1001.7,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764872143,
+        "nanoseconds": 123000000
+      },
+      "loadId": "3463593",
+      "miles": 1411,
+      "doDate": "2025-12-04",
+      "origin": "OLYMPIA, WA",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "notes": "",
+      "deadhead": 70,
+      "puDate": "2025-12-02",
+      "destination": "COMMERCE CITY, CO",
+      "broker": "KNX",
+      "migratedFrom": "loads"
+    },
+    {
+      "id": "rTcasS7ZdjkCQfRSQmQ6",
+      "broker": "RXO",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764915070,
+        "nanoseconds": 798000000
+      },
+      "destination": "Bellevue, WA",
+      "migratedFrom": "loads",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764872361,
+        "nanoseconds": 510000000
+      },
+      "amount": 1421,
+      "puDate": "2025-11-29",
+      "deadhead": 223,
+      "notes": "",
+      "migratedAt": "2025-12-20T22:38:01.427Z",
+      "origin": "Lees Summit, MO",
+      "doDate": "2025-12-02",
+      "miles": 1857,
+      "loadId": "20709000"
+    },
+    {
+      "id": "rPdWsQ9RVfK0QndGFOs2",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764915489,
+        "nanoseconds": 80000000
+      },
+      "amount": 753.9,
+      "puDate": "2025-11-26",
+      "deadhead": 182,
+      "notes": "",
+      "origin": "Arrey, NM 87930",
+      "migratedAt": "2025-12-20T22:38:01.427Z",
+      "doDate": "2025-11-28",
+      "miles": 945,
+      "loadId": "20717095",
+      "broker": "RXO",
+      "destination": "Carthage, MO 64836",
+      "migratedFrom": "loads"
+    },
+    {
+      "id": "QLcRBbsr3v7Bw6cXVOqo",
+      "broker": "KCH Transportation",
+      "destination": "ALBUQUERQUE, New Mexico",
+      "migratedFrom": "loads",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764915559,
+        "nanoseconds": 813000000
+      },
+      "amount": 597.8,
+      "notes": "",
+      "deadhead": 118,
+      "puDate": "2025-11-24",
+      "loadId": "9312420",
+      "miles": 786,
+      "doDate": "2025-11-26",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "origin": "Buena Park, CA"
+    },
+    {
+      "id": "WNCLeJM5dFo0W60nhwct",
+      "notes": "",
+      "deadhead": 59,
+      "puDate": "2025-11-16",
+      "loadId": "20494280",
+      "miles": 2316,
+      "doDate": "2025-11-24",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "origin": "Spartanburg, SC",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764915682,
+        "nanoseconds": 670000000
+      },
+      "amount": 1627.5,
+      "migratedFrom": "loads",
+      "broker": "RXO",
+      "destination": "Mojave, CA"
+    },
+    {
+      "id": "osaGkm5QwNUvjyehAoke",
+      "origin": "LINDEN NJ",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "doDate": "2025-11-15",
+      "miles": 643,
+      "loadId": "337904",
+      "puDate": "2025-11-14",
+      "deadhead": 25,
+      "notes": "",
+      "amount": 450.1,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "migratedFrom": "loads",
+      "destination": "CHARLOTTE NC",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764396937,
+        "nanoseconds": 613000000
+      },
+      "broker": "AMERICAN LOG"
+    },
+    {
+      "id": "BHwYu2Wp8NENVV622O35",
+      "broker": "Right Peak",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764916579,
+        "nanoseconds": 451000000
+      },
+      "destination": "Somerset NJ",
+      "migratedFrom": "loads",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764915919,
+        "nanoseconds": 293000000
+      },
+      "amount": 737.1,
+      "puDate": "2025-11-12",
+      "notes": "",
+      "deadhead": 140,
+      "doDate": "2025-11-14",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "origin": "Bolingbrook IL",
+      "loadId": "104781",
+      "miles": 963
+    },
+    {
+      "id": "5nbO9I77f47Jz4zaPBxi",
+      "broker": "Magna",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764397049,
+        "nanoseconds": 524000000
+      },
+      "destination": "EAST PEORIA, IL",
+      "migratedFrom": "loads",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 497,
+      "puDate": "2025-11-11",
+      "deadhead": 4,
+      "notes": "",
+      "origin": "ROANOKE, VA",
+      "migratedAt": "2025-12-20T22:38:01.424Z",
+      "doDate": "2025-11-12",
+      "miles": 710,
+      "loadId": "125839449"
+    },
+    {
+      "id": "TuCohlaVGmapAZsiYhJt",
+      "amount": 380.8,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "origin": "GREENWICH, CT",
+      "doDate": "2025-11-11",
+      "miles": 496,
+      "loadId": "1594467",
+      "puDate": "2025-11-10",
+      "deadhead": 98,
+      "notes": "",
+      "destination": "ROANOKE VA",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764397059,
+        "nanoseconds": 285000000
+      },
+      "broker": "ATG",
+      "migratedFrom": "loads"
+    },
+    {
+      "id": "KtNNIPsyyicLdoH8l28z",
+      "notes": "",
+      "deadhead": 62,
+      "puDate": "2025-11-06",
+      "loadId": "11617921",
+      "miles": 1885,
+      "doDate": "2025-11-09",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "origin": "WINDSOR , CO",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 1327.9,
+      "migratedFrom": "loads",
+      "broker": "CORPORATETRAFFIC",
+      "destination": "EAST WINDSOR , CT"
+    },
+    {
+      "id": "BznpaxGccyypj3oeljyH",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 873.6,
+      "deadhead": 11,
+      "notes": "",
+      "puDate": "2025-11-04",
+      "miles": 1248,
+      "loadId": "235589",
+      "origin": "CLACKAMAS OR",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "doDate": "2025-11-06",
+      "broker": "MX SOLUTIONS",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764916122,
+        "nanoseconds": 456000000
+      },
+      "destination": "DENVER CO",
+      "migratedFrom": "loads"
+    },
+    {
+      "id": "lkJ0ve6kNRAmA2MKdzkE",
+      "migratedFrom": "loads",
+      "destination": "Portland,OR",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764916129,
+        "nanoseconds": 828000000
+      },
+      "broker": "NTG",
+      "origin": "Great Falls,MT",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "doDate": "2025-11-04",
+      "miles": 716,
+      "loadId": "8906813",
+      "puDate": "2025-11-03",
+      "deadhead": 4,
+      "notes": "",
+      "amount": 501.2,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      }
+    },
+    {
+      "id": "pJx5Qah8P1QWHB86NouQ",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764918735,
+        "nanoseconds": 228000000
+      },
+      "destination": "Great Falls, MT",
+      "broker": "RXO",
+      "migratedFrom": "loads",
+      "amount": 872.9,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "loadId": "20475681",
+      "miles": 1247,
+      "doDate": "2025-11-02",
+      "migratedAt": "2025-12-20T22:38:01.427Z",
+      "origin": "Commerce, CA",
+      "notes": "",
+      "deadhead": 4,
+      "puDate": "2025-10-31"
+    },
+    {
+      "id": "0kZ7SVRo2PlkvHpotZnb",
+      "migratedFrom": "loads",
+      "destination": "Los Angeles, CA",
+      "broker": "MOLO",
+      "migratedAt": "2025-12-20T22:38:01.423Z",
+      "origin": "Ulysses, KS",
+      "doDate": "2025-10-29",
+      "miles": 1209,
+      "loadId": "2002291803",
+      "puDate": "2025-10-27",
+      "deadhead": 160,
+      "notes": "",
+      "amount": 923.3,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      }
+    },
+    {
+      "id": "nVeJEe8AIzkBPoD5VKyA",
+      "amount": 221.9,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764916328,
+        "nanoseconds": 170000000
+      },
+      "miles": 271,
+      "loadId": "1260768",
+      "origin": "FOLCROFT PA",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "doDate": "2025-10-24",
+      "deadhead": 96,
+      "notes": "",
+      "puDate": "2025-10-23",
+      "destination": "WEST WARWICK RI",
+      "broker": "SCOTLYN",
+      "migratedFrom": "loads"
+    },
+    {
+      "id": "gwfkreVSgc8QBso6HWGx",
+      "notes": "",
+      "deadhead": 99,
+      "puDate": "2025-10-23",
+      "loadId": "60012450817",
+      "miles": 1826,
+      "doDate": "2025-10-28",
+      "origin": "WALLINGFORD, CT",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 1312.5,
+      "migratedFrom": "loads",
+      "broker": "Old Dominion",
+      "destination": "DALHART, TX",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764917009,
+        "nanoseconds": 170000000
+      }
+    },
+    {
+      "id": "BGk63W513oMF1JJVMmxc",
+      "migratedFrom": "loads",
+      "destination": "UNION, NJ",
+      "broker": "Integrity Express Logistics",
+      "origin": "OTHELLO, WA",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "doDate": "2025-10-23",
+      "miles": 2673,
+      "loadId": "2755560",
+      "puDate": "2025-10-20",
+      "deadhead": 42,
+      "notes": "",
+      "amount": 1871.1,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      }
+    },
+    {
+      "id": "pE3sNvuIWlZPL5YlOxkK",
+      "migratedFrom": "loads",
+      "destination": "Pasco, WA",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764917048,
+        "nanoseconds": 143000000
+      },
+      "broker": "Blue Grace",
+      "doDate": "2025-10-21",
+      "origin": "Pooler, GA",
+      "migratedAt": "2025-12-20T22:38:01.427Z",
+      "loadId": "SO-200034",
+      "miles": 2701,
+      "puDate": "2025-10-16",
+      "notes": "",
+      "deadhead": 45,
+      "amount": 1890.7,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      }
+    },
+    {
+      "id": "FyAbUTWo2lIjdkV0f1GV",
+      "broker": "Direct Connect",
+      "destination": "STATESBORO, GA",
+      "migratedFrom": "loads",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 795.2,
+      "puDate": "2025-10-14",
+      "notes": "",
+      "deadhead": 27,
+      "doDate": "2025-10-16",
+      "origin": "SAN ANTONIO, TX",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "loadId": "6371924",
+      "miles": 1136
+    },
+    {
+      "id": "hM0O7eneCqoLkuH8hxNc",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "origin": "new brockton, AL",
+      "doDate": "2025-10-14",
+      "miles": 811,
+      "loadId": "20246513",
+      "puDate": "2025-10-13",
+      "deadhead": 33,
+      "notes": "",
+      "amount": 567.7,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "migratedFrom": "loads",
+      "destination": "SELMA, TX",
+      "broker": "JERUE"
+    },
+    {
+      "id": "lvJwBSGx06I6cNWXfust",
+      "amount": 851.9,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "doDate": "2025-10-14",
+      "origin": "WATERFORD NY",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "loadId": "237134",
+      "miles": 1211,
+      "puDate": "2025-10-11",
+      "notes": "",
+      "deadhead": 56,
+      "destination": "TROY AL",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764917126,
+        "nanoseconds": 991000000
+      },
+      "broker": "Shram",
+      "migratedFrom": "loads"
+    },
+    {
+      "id": "1DhXYb3Hh71tPO7SQ5Jv",
+      "puDate": "2025-10-09",
+      "deadhead": 142,
+      "notes": "",
+      "origin": "NORTH AURORA, IL",
+      "migratedAt": "2025-12-20T22:38:01.424Z",
+      "doDate": "2025-10-11",
+      "miles": 818,
+      "loadId": "2789357",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764916466,
+        "nanoseconds": 515000000
+      },
+      "amount": 637,
+      "migratedFrom": "loads",
+      "broker": "AXLE",
+      "destination": "JOHNSTOWN, NY"
+    },
+    {
+      "id": "RcdKX3loM6m2ktGwwrcH",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "origin": "Zionsville,IN",
+      "doDate": "2025-10-09",
+      "miles": 298,
+      "loadId": "1904794",
+      "puDate": "2025-10-08",
+      "deadhead": 184,
+      "notes": "",
+      "amount": 302.4,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "migratedFrom": "loads",
+      "destination": "Jackson,MI",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764397070,
+        "nanoseconds": 103000000
+      },
+      "broker": "Online Freight Service"
+    },
+    {
+      "id": "0qkF6bgSOrRDTLGWN31c",
+      "amount": 1001,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "miles": 1430,
+      "loadId": "6ER1562",
+      "origin": "San antonio,TX",
+      "migratedAt": "2025-12-20T22:38:01.424Z",
+      "doDate": "2025-10-07",
+      "deadhead": 0,
+      "notes": "",
+      "puDate": "2025-10-06",
+      "destination": "Schertz,TX",
+      "broker": "JB HUNT",
+      "migratedFrom": "loads"
+    },
+    {
+      "id": "Q2k5SvgTB3DU5lTh4LUH",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "origin": "ATLANTA,GA",
+      "doDate": "2025-10-03",
+      "miles": 1027,
+      "loadId": "T-115Z9XNSV",
+      "puDate": "2025-10-02",
+      "deadhead": 0,
+      "notes": "",
+      "amount": 718.9,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "migratedFrom": "loads",
+      "destination": "SAN ANTONIO,TX",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764397077,
+        "nanoseconds": 688000000
+      },
+      "broker": "AMAZON"
+    },
+    {
+      "id": "bm7Yk2mPasVCxlvMXH07",
+      "broker": "AMAZON",
+      "destination": "UNION CITY,GA",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764397085,
+        "nanoseconds": 79000000
+      },
+      "migratedFrom": "loads",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 361.9,
+      "puDate": "2025-10-01",
+      "notes": "",
+      "deadhead": 0,
+      "doDate": "2025-10-02",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "origin": "LITTLE ROCK,AR",
+      "loadId": "T-1117N91GY",
+      "miles": 517
+    },
+    {
+      "id": "BVXMbfwdEzI4DwJD0ehw",
+      "puDate": "2025-10-01",
+      "notes": "",
+      "deadhead": 0,
+      "doDate": "2025-10-02",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "origin": "HUMBLE,TX",
+      "loadId": "1147V34MN",
+      "miles": 418,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 292.6,
+      "migratedFrom": "loads",
+      "broker": "AMAZON",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764397091,
+        "nanoseconds": 639000000
+      },
+      "destination": "LITTLE ROCK,AR"
+    },
+    {
+      "id": "V1zIhmRfYMW74SyF9T6p",
+      "amount": 139.8,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "miles": 233,
+      "loadId": "114HDZZG7",
+      "origin": "CORPUS CHRISTI,TX",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "doDate": "2025-10-01",
+      "deadhead": 0,
+      "notes": "",
+      "puDate": "2025-09-30",
+      "destination": "HOUSTON,TX",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764917306,
+        "nanoseconds": 769000000
+      },
+      "broker": "AMAZON",
+      "migratedFrom": "loads"
+    },
+    {
+      "id": "Ksym9BC1wdku7WKqpc7F",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764917426,
+        "nanoseconds": 690000000
+      },
+      "amount": 509.08,
+      "notes": "",
+      "deadhead": 0,
+      "puDate": "2025-09-24",
+      "loadId": "T-115F8RVFV",
+      "miles": 848,
+      "doDate": "2025-09-26",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "origin": "STONE MOUNTAIN, GA",
+      "broker": "AMAZON",
+      "destination": "Houston, TX",
+      "migratedFrom": "loads"
+    },
+    {
+      "id": "1QmyuBJMTjn0atcoZsDg",
+      "broker": "AMAZON",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764047601,
+        "nanoseconds": 348000000
+      },
+      "destination": "ATLANTA,GA",
+      "migratedFrom": "loads",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 306.2,
+      "puDate": "2025-09-23",
+      "deadhead": 0,
+      "notes": "",
+      "migratedAt": "2025-12-20T22:38:01.424Z",
+      "origin": "BATON ROUG,LA",
+      "doDate": "2025-09-24",
+      "miles": 510,
+      "loadId": "112BWYMR9"
+    },
+    {
+      "id": "aVyMLTuRhpEgzKWaQyFA",
+      "destination": "BATON ROUG,LA",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764047576,
+        "nanoseconds": 422000000
+      },
+      "broker": "AMAZON",
+      "migratedFrom": "loads",
+      "amount": 454.64,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "loadId": "113L7NZFM",
+      "miles": 757,
+      "doDate": "2025-09-23",
+      "origin": "CHARLOTTE,NC",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "notes": "",
+      "deadhead": 0,
+      "puDate": "2025-09-22"
+    },
+    {
+      "id": "AlWqQ66VhimrYg0UkE4t",
+      "migratedFrom": "loads",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764917345,
+        "nanoseconds": 661000000
+      },
+      "destination": "CHARLOTTE,NC",
+      "broker": "AMAZON",
+      "origin": "ETNA,OH",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "doDate": "2025-09-23",
+      "miles": 538,
+      "loadId": "112Q7PMNC",
+      "puDate": "2025-09-22",
+      "deadhead": 43,
+      "notes": "",
+      "amount": 335.7,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      }
+    },
+    {
+      "id": "TqnubySrojxN3alloO2A",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 358.2,
+      "deadhead": 0,
+      "notes": "",
+      "puDate": "2025-09-20",
+      "miles": 597,
+      "loadId": "1149XXK2J",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "origin": "CAMPBELLSVILLE,KY",
+      "doDate": "2025-09-20",
+      "broker": "AMAZON",
+      "destination": "Indianapolis,IN",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764047468,
+        "nanoseconds": 575000000
+      },
+      "migratedFrom": "loads"
+    },
+    {
+      "id": "nJN18hQ92AfU0FpyZk9p",
+      "amount": 4.8,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764047420,
+        "nanoseconds": 53000000
+      },
+      "loadId": "116FNL38J",
+      "miles": 16,
+      "doDate": "2025-09-19",
+      "origin": "SHEPHERDSVILLE, KY",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "notes": "",
+      "deadhead": 16,
+      "puDate": "2025-09-19",
+      "destination": "SHEPHERDSVILLE, KY",
+      "broker": "AMAZON",
+      "migratedFrom": "loads"
+    },
+    {
+      "id": "a4BSSD6L4enBwBn01g4z",
+      "broker": "AMAZON",
+      "destination": "CAMPBELLSVILLE,KY",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764047368,
+        "nanoseconds": 215000000
+      },
+      "migratedFrom": "loads",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 1081.8,
+      "puDate": "2025-09-15",
+      "deadhead": 0,
+      "notes": "",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "origin": "SHEPHERDSVILLE,KY",
+      "doDate": "2025-09-18",
+      "miles": 1803,
+      "loadId": "T-115L5H8XH"
+    },
+    {
+      "id": "zoRDRfo72MaJhPnwAEhj",
+      "destination": "Euclid,OH",
+      "broker": "AMAZON",
+      "migratedFrom": "loads",
+      "amount": 274.2,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764047201,
+        "nanoseconds": 123000000
+      },
+      "loadId": "113JY26JR",
+      "miles": 479,
+      "doDate": "2025-09-13",
+      "origin": "Fishersville,VA",
+      "migratedAt": "2025-12-20T22:38:01.427Z",
+      "notes": "",
+      "deadhead": 44,
+      "puDate": "2025-09-13"
+    },
+    {
+      "id": "mf0eJnC7893PJrDgMjGs",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764047288,
+        "nanoseconds": 983000000
+      },
+      "amount": 270,
+      "deadhead": 0,
+      "notes": "",
+      "puDate": "2025-09-13",
+      "miles": 450,
+      "loadId": "T-113J5FZZQ",
+      "origin": "Romulus,MI",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "doDate": "2025-09-14",
+      "broker": "AMAZON",
+      "destination": "Jeffersonville,IN",
+      "migratedFrom": "loads"
+    },
+    {
+      "id": "SczSzACNfUCkTIn8lqMJ",
+      "doDate": "2025-09-12",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "origin": "Port Saint Lucie, FL",
+      "loadId": "115RRC6MR",
+      "miles": 887,
+      "puDate": "2025-09-10",
+      "notes": "",
+      "deadhead": 117,
+      "amount": 552.3,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "migratedFrom": "loads",
+      "destination": "Fredericksburg, VA",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764047138,
+        "nanoseconds": 8000000
+      },
+      "broker": "AMAZON"
+    },
+    {
+      "id": "ZMYoRi47p6wSUXeNRpEJ",
+      "migratedFrom": "loads",
+      "broker": "AMAZON",
+      "destination": "Orlando, FL",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764047103,
+        "nanoseconds": 7000000
+      },
+      "puDate": "2025-09-08",
+      "notes": "",
+      "deadhead": 0,
+      "doDate": "2025-09-10",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "origin": "Memphis, TN",
+      "loadId": "T-112Y4TG2B",
+      "miles": 916,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 549.6
+    },
+    {
+      "id": "IFa6DXSHuaPzQ8iP4R2Z",
+      "amount": 294.24,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "loadId": "113X1XV6L",
+      "miles": 475,
+      "doDate": "2025-09-07",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "origin": "Whiteland, IN",
+      "notes": "",
+      "deadhead": 80,
+      "puDate": "2025-09-05",
+      "destination": "Byhalia, MS",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764047064,
+        "nanoseconds": 323000000
+      },
+      "broker": "AMAZON",
+      "migratedFrom": "loads"
+    },
+    {
+      "id": "Pkg3Cb9kkxyPoWeSt2bB",
+      "migratedFrom": "loads",
+      "destination": "GREENWOOD, IN",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764047042,
+        "nanoseconds": 137000000
+      },
+      "broker": "AMAZON",
+      "loadId": "T-116MBN166",
+      "miles": 1087,
+      "doDate": "2025-09-05",
+      "origin": "North Andover, MA",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "notes": "",
+      "deadhead": 0,
+      "puDate": "2025-09-04",
+      "amount": 652.2,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      }
+    },
+    {
+      "id": "VdpIQuUgNILkTbZ6DAIu",
+      "origin": "Elwood, IL",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "doDate": "2025-09-04",
+      "miles": 1039,
+      "loadId": "114KZ4NPR",
+      "puDate": "2025-09-03",
+      "deadhead": 0,
+      "notes": "",
+      "amount": 623.4,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "migratedFrom": "loads",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764047010,
+        "nanoseconds": 643000000
+      },
+      "destination": "North Andover, MA",
+      "broker": "AMAZON"
+    },
+    {
+      "id": "sO6QtUghmkFjUTZ6HKi2",
+      "deadhead": 0,
+      "notes": "",
+      "puDate": "2025-09-02",
+      "miles": 30,
+      "loadId": "116K44X3H",
+      "origin": "Channahon, IL",
+      "migratedAt": "2025-12-20T22:38:01.427Z",
+      "doDate": "2025-09-02",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764046949,
+        "nanoseconds": 731000000
+      },
+      "amount": 18,
+      "migratedFrom": "loads",
+      "broker": "AMAZON",
+      "destination": "Aurora, IL"
+    },
+    {
+      "id": "TTljQWg7zgfs0VPEueOK",
+      "origin": "Fargo ND",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "doDate": "2025-09-02",
+      "miles": 653,
+      "loadId": "112PG4NLD",
+      "puDate": "2025-09-01",
+      "deadhead": 0,
+      "notes": "",
+      "amount": 391.8,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "migratedFrom": "loads",
+      "destination": "CREST HILL, IL",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764046890,
+        "nanoseconds": 479000000
+      },
+      "broker": "AMAZON"
+    },
+    {
+      "id": "HSiH7iwrSNZtp9LIqTIK",
+      "destination": "FARGO,ND",
+      "broker": "AMAZON",
+      "migratedFrom": "loads",
+      "amount": 363,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764046837,
+        "nanoseconds": 172000000
+      },
+      "miles": 605,
+      "loadId": "116KD7693",
+      "origin": "SAINT LOUIS,MO",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "doDate": "2025-09-01",
+      "deadhead": 0.3,
+      "notes": "",
+      "puDate": "2025-08-31"
+    },
+    {
+      "id": "4ADj2ZewYRUyoGmd0auE",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764046764,
+        "nanoseconds": 395000000
+      },
+      "amount": 557.4,
+      "puDate": "2025-08-27",
+      "deadhead": 0.3,
+      "notes": "",
+      "migratedAt": "2025-12-20T22:38:01.424Z",
+      "origin": "Dallas, TX",
+      "doDate": "2025-08-29",
+      "miles": 929,
+      "loadId": "33560830",
+      "broker": "Linehaul",
+      "destination": "Manteno, IL",
+      "migratedFrom": "loads"
+    },
+    {
+      "id": "Jfg8hG64SQwi3rFEyHoI",
+      "migratedFrom": "loads",
+      "destination": "Arlington,TX",
+      "broker": "TOWER LOGISTICS",
+      "origin": "Edgewater Park,NJ",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "doDate": "2025-08-27",
+      "miles": 1507,
+      "loadId": "7456141",
+      "puDate": "2025-08-25",
+      "deadhead": 0.3,
+      "notes": "",
+      "amount": 904.2,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764046708,
+        "nanoseconds": 891000000
+      }
+    },
+    {
+      "id": "GtU0WVC4emMzwiyq8fHV",
+      "notes": "",
+      "deadhead": 0,
+      "puDate": "2025-08-20",
+      "loadId": "163902",
+      "miles": 1986,
+      "doDate": "2025-08-22",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "origin": "Irwindale, CA",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764046540,
+        "nanoseconds": 791000000
+      },
+      "amount": 695.1,
+      "migratedFrom": "loads",
+      "broker": "BEST OVERNITE EXPRESS, INC.",
+      "destination": "Northlake, IL"
+    },
+    {
+      "id": "KWdxkmSW8lPbyrZiUZ4o",
+      "broker": "",
+      "destination": "Los Angeles,CA",
+      "migratedFrom": "loads",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764046425,
+        "nanoseconds": 76000000
+      },
+      "amount": 245.25,
+      "puDate": "2025-08-19",
+      "deadhead": 43,
+      "notes": "",
+      "origin": "Newton,UT",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "doDate": "2025-08-20",
+      "miles": 839,
+      "loadId": "237631"
+    },
+    {
+      "id": "s64smTEOX96zs0P6M1Pe",
+      "puDate": "2025-08-14",
+      "deadhead": 90,
+      "notes": "",
+      "origin": "BLOOMINGTON,CA",
+      "migratedAt": "2025-12-20T22:38:01.427Z",
+      "doDate": "2025-08-15",
+      "miles": 1840,
+      "loadId": "2135857",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 650,
+      "migratedFrom": "loads",
+      "broker": "US EXPRESS",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764046309,
+        "nanoseconds": 858000000
+      },
+      "destination": "BILLINGS,MT"
+    },
+    {
+      "id": "SDltFyIxtdmP2VfT8lIO",
+      "migratedFrom": "loads",
+      "broker": "TQL",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764046229,
+        "nanoseconds": 445000000
+      },
+      "destination": "CASTAIC,CA",
+      "puDate": "2025-08-11",
+      "deadhead": 166,
+      "notes": "",
+      "origin": "LUFKIN,TX",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "doDate": "2025-08-13",
+      "miles": 1608,
+      "loadId": "33295884",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 580.2
+    },
+    {
+      "id": "gxLizxViUp9GArMIbH00",
+      "broker": "TRAKKER LOG.",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764045933,
+        "nanoseconds": 129000000
+      },
+      "destination": "WACO,TX",
+      "migratedFrom": "loads",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 306.9,
+      "puDate": "2025-08-08",
+      "notes": "",
+      "deadhead": 108,
+      "doDate": "2025-08-09",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "origin": "LAVRENCEVILLE,GA",
+      "loadId": "0283264",
+      "miles": 852
+    },
+    {
+      "id": "pqGitOljRBcaayCyDecv",
+      "migratedFrom": "loads",
+      "broker": "AGRAMONT WORDWIDE",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764045883,
+        "nanoseconds": 46000000
+      },
+      "destination": "WEST POINT,GA",
+      "puDate": "2025-08-05",
+      "deadhead": 137,
+      "notes": "",
+      "origin": "CARSON,CA",
+      "migratedAt": "2025-12-20T22:38:01.427Z",
+      "doDate": "2025-08-07",
+      "miles": 2173,
+      "loadId": "1017690",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 773.6
+    },
+    {
+      "id": "WFBC2QEwC7mwsr6pmj2O",
+      "migratedFrom": "loads",
+      "broker": "SHARK",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764045853,
+        "nanoseconds": 63000000
+      },
+      "destination": "BAKERSFIELD,CA",
+      "notes": "",
+      "deadhead": 0,
+      "puDate": "2025-08-04",
+      "loadId": "20777",
+      "miles": 868,
+      "doDate": "2025-08-05",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "origin": "PORTLAND, OR",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 303.8
+    },
+    {
+      "id": "N42VRliOwcMcO3cu6dgI",
+      "broker": "TQL",
+      "destination": "STAYTON,OR",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764046015,
+        "nanoseconds": 10000000
+      },
+      "migratedFrom": "loads",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 810.25,
+      "puDate": "2025-08-01",
+      "notes": "",
+      "deadhead": 0,
+      "doDate": "2025-08-10",
+      "origin": "WALLER,TX",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "loadId": "33196916",
+      "miles": 2315
+    },
+    {
+      "id": "94gcW99zz0Dg6wQTqgto",
+      "miles": 1218,
+      "loadId": "922133",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "origin": "GARNER,NC",
+      "doDate": "2025-07-31",
+      "deadhead": 96,
+      "notes": "BOSALMASINI BEKLEDIK",
+      "puDate": "2025-07-30",
+      "amount": 433.2,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "migratedFrom": "loads",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764045791,
+        "nanoseconds": 484000000
+      },
+      "destination": "CONROE,TX",
+      "broker": "NATIONWIDE"
+    },
+    {
+      "id": "KyM9MQw7Nb56WGW3QmgT",
+      "puDate": "2025-07-29",
+      "deadhead": 71,
+      "notes": "",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "origin": "MENDOTE,IL",
+      "doDate": "2025-07-30",
+      "miles": 1029,
+      "loadId": "5310876340",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 363.3,
+      "migratedFrom": "loads",
+      "broker": "MODE",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764045800,
+        "nanoseconds": 403000000
+      },
+      "destination": "KENANSVILLE,NC"
+    },
+    {
+      "id": "7YwKnvlEIGWXn0kKRl3b",
+      "notes": "TRACTOR YAVAS GITTI TRAILER ICI CIZILDI IMZA ATMADILAR",
+      "deadhead": 184,
+      "puDate": "2025-07-26",
+      "loadId": "33173535",
+      "miles": 1956,
+      "doDate": "2025-07-29",
+      "migratedAt": "2025-12-20T22:38:01.424Z",
+      "origin": "FONTANA,CA",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 712.2,
+      "migratedFrom": "loads",
+      "broker": "TQL",
+      "destination": "JOILET,IL",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764045632,
+        "nanoseconds": 48000000
+      }
+    },
+    {
+      "id": "SrjhmU3Pw2fRPxIIP61f",
+      "doDate": "2025-07-26",
+      "origin": "NEW BERN,NC",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "loadId": "33051869",
+      "miles": 2500,
+      "puDate": "2025-07-24",
+      "notes": "",
+      "deadhead": 50,
+      "amount": 865,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "migratedFrom": "loads",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764045474,
+        "nanoseconds": 124000000
+      },
+      "destination": "LAS VEGAS,NV",
+      "broker": "TQL"
+    },
+    {
+      "id": "7sPZPj5CduHTodw1Tm2X",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764045445,
+        "nanoseconds": 837000000
+      },
+      "destination": "GARNER,NC",
+      "broker": "NO LIMIT LOG",
+      "migratedFrom": "loads",
+      "amount": 138.95,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "origin": "CUMMING,GA",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "doDate": "2025-07-24",
+      "miles": 397,
+      "loadId": "47076",
+      "puDate": "2025-07-23",
+      "deadhead": 0,
+      "notes": ""
+    },
+    {
+      "id": "Ws0VLgWdctoBUk9TFybf",
+      "broker": "NBI LOG.",
+      "destination": "PLYMOUTH,MA",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764917599,
+        "nanoseconds": 377000000
+      },
+      "migratedFrom": "loads",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 761.85,
+      "notes": "",
+      "deadhead": 123,
+      "puDate": "2025-07-21",
+      "loadId": "101086",
+      "miles": 2124,
+      "doDate": "2025-07-23",
+      "origin": "2xOAKWOOD,GA",
+      "migratedAt": "2025-12-20T22:38:01.426Z"
+    },
+    {
+      "id": "aAiZrjcGTDERCj6wqOUy",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 811.3,
+      "puDate": "2025-07-15",
+      "notes": "",
+      "deadhead": 329,
+      "doDate": "2025-07-17",
+      "origin": "SAN LEANDRO,CA",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "loadId": "2125839-10839530",
+      "miles": 2506,
+      "broker": "US XPRESS",
+      "destination": "ELLENWOOD,GA",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764044884,
+        "nanoseconds": 211000000
+      },
+      "migratedFrom": "loads"
+    },
+    {
+      "id": "bCL8yTZCl9YI8SeMQ8uS",
+      "migratedAt": "2025-12-20T22:38:01.426Z",
+      "origin": "BRONX,NY",
+      "doDate": "2025-07-15",
+      "miles": 2920,
+      "loadId": "995565",
+      "puDate": "2025-07-12",
+      "deadhead": 0,
+      "notes": "TEKERE CIVI BATTI TAMIR ETTIRDIK TRAILER FEDEXE BIRAKTIK",
+      "amount": 1022,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "migratedFrom": "loads",
+      "destination": "SAN LEANDRO,CA",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764917645,
+        "nanoseconds": 380000000
+      },
+      "broker": "ROADWAY"
+    },
+    {
+      "id": "4w4JLSXjH9EAyKkC0D4A",
+      "broker": "ROADWAY",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764044800,
+        "nanoseconds": 804000000
+      },
+      "destination": "BRONX,NY",
+      "migratedFrom": "loads",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 1031.7,
+      "puDate": "2025-07-05",
+      "notes": "Tir bozuldu def leaking arizasi 2 gun otelde kaldik amarilloda",
+      "deadhead": 312,
+      "doDate": "2025-07-11",
+      "migratedAt": "2025-12-20T22:38:01.424Z",
+      "origin": "LOS ANGELES,CA",
+      "loadId": "995551",
+      "miles": 3126
+    },
+    {
+      "id": "0yN1B11Gs3iWsJQqjYgr",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764044768,
+        "nanoseconds": 533000000
+      },
+      "destination": "RICHMOND,CA",
+      "broker": "SHEER",
+      "migratedFrom": "loads",
+      "amount": 432.6,
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "miles": 1236,
+      "loadId": "0357286",
+      "migratedAt": "2025-12-20T22:38:01.424Z",
+      "origin": "DENVER,CO",
+      "doDate": "2025-07-04",
+      "deadhead": 0,
+      "notes": "",
+      "puDate": "2025-07-03"
+    },
+    {
+      "id": "81mjliVfFIN6f3AS4ujB",
+      "createdAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764027572,
+        "nanoseconds": 546000000
+      },
+      "amount": 288.4,
+      "deadhead": 0,
+      "notes": "",
+      "puDate": "2025-07-02",
+      "miles": 824,
+      "loadId": "85933-154143473",
+      "origin": "EARTH CITY,MO",
+      "migratedAt": "2025-12-20T22:38:01.425Z",
+      "doDate": "2025-07-03",
+      "broker": "SWICK LOG.",
+      "updatedAt": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1764044742,
+        "nanoseconds": 158000000
+      },
+      "destination": "DENVER,CO",
+      "migratedFrom": "loads"
+    }
+  ]
+}
