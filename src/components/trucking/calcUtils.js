@@ -70,8 +70,9 @@ export function revenueByBroker(loads, settings) {
 export function revenueByMonth(loads, settings) {
   const map = {};
   for (const load of loads) {
-    if (!load.pickup_date) continue;
-    const key = moment(load.pickup_date).format('YYYY-MM');
+    const dateVal = load.delivery_date || load.pickup_date;
+    if (!dateVal) continue;
+    const key = moment(dateVal).format('YYYY-MM');
     map[key] = (map[key] || 0) + calculateEarnings(load, settings);
   }
   return Object.entries(map)
@@ -85,8 +86,9 @@ export function revenueByMonth(loads, settings) {
 export function revenueByYear(loads, settings) {
   const map = {};
   for (const load of loads) {
-    if (!load.pickup_date) continue;
-    const key = moment(load.pickup_date).format('YYYY');
+    const dateVal = load.delivery_date || load.pickup_date;
+    if (!dateVal) continue;
+    const key = moment(dateVal).format('YYYY');
     map[key] = (map[key] || 0) + calculateEarnings(load, settings);
   }
   return Object.entries(map)
@@ -100,8 +102,9 @@ export function revenueByYear(loads, settings) {
 export function revenueByWeek(loads, settings) {
   const map = {};
   for (const load of loads) {
-    if (!load.pickup_date) continue;
-    const key = moment(load.pickup_date).startOf('isoWeek').format('YYYY-MM-DD');
+    const dateVal = load.delivery_date || load.pickup_date;
+    if (!dateVal) continue;
+    const key = moment(dateVal).startOf('isoWeek').format('YYYY-MM-DD');
     map[key] = (map[key] || 0) + calculateEarnings(load, settings);
   }
   return Object.entries(map)
@@ -111,11 +114,12 @@ export function revenueByWeek(loads, settings) {
 
 /**
  * Filter loads by time period: today, thisWeek, thisMonth, thisYear
+ * dateField: field name to use for date comparison (default: 'pickup_date')
  */
-export function filterByPeriod(loads, period) {
+export function filterByPeriod(loads, period, dateField = 'pickup_date') {
   const now = moment();
   return loads.filter((load) => {
-    const date = moment(load.pickup_date);
+    const date = moment(load[dateField] || load.pickup_date);
     switch (period) {
       case 'today':
         return date.isSame(now, 'day');

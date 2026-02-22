@@ -16,7 +16,8 @@ import Load from '../api/entities/Load';
 function groupByWeek(loads) {
   const groups = {};
   for (const load of loads) {
-    const weekStart = moment(load.pickup_date).startOf('isoWeek').format('YYYY-MM-DD');
+    const dateToUse = load.delivery_date || load.pickup_date;
+    const weekStart = moment(dateToUse).startOf('isoWeek').format('YYYY-MM-DD');
     if (!groups[weekStart]) groups[weekStart] = [];
     groups[weekStart].push(load);
   }
@@ -25,8 +26,26 @@ function groupByWeek(loads) {
     .map(([weekStart, items]) => ({
       weekStart,
       weekEnd: moment(weekStart).endOf('isoWeek').format('YYYY-MM-DD'),
-      loads: items.sort((a, b) => moment(b.pickup_date).diff(moment(a.pickup_date))),
+      loads: items.sort((a, b) =>
+        moment(b.delivery_date || b.pickup_date).diff(moment(a.delivery_date || a.pickup_date))
+      ),
     }));
+}
+
+function rateLabel(settings) {
+  const { earning_profile, percentage_rate, rate_per_mile } = settings || {};
+  switch (earning_profile) {
+    case 'solo_percentage':
+    case 'team_percentage':
+      return `${percentage_rate || 0}%`;
+    case 'solo_per_mile':
+    case 'team_per_mile':
+      return `$${(rate_per_mile || 0).toFixed(2)}/mi`;
+    case 'owner_operator':
+      return '100%';
+    default:
+      return '—';
+  }
 }
 
 function weekLabel(weekStart, weekEnd) {
@@ -221,6 +240,8 @@ export default function Loads() {
                       <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Route</th>
                       <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Miles</th>
                       <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Gross</th>
+                      <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">RPM</th>
+                      <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Rate</th>
                       <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Earnings</th>
                       <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Status</th>
                       <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Date</th>
@@ -237,12 +258,19 @@ export default function Loads() {
                         </td>
                         <td className="px-4 py-3 text-right tabular-nums text-slate-700 dark:text-slate-300">{formatMiles(load.loaded_miles)}</td>
                         <td className="px-4 py-3 text-right tabular-nums text-slate-700 dark:text-slate-300">{formatCurrency(load.gross_amount)}</td>
+                        <td className="px-4 py-3 text-right tabular-nums text-slate-600 dark:text-slate-400 text-xs">
+                          {load.loaded_miles > 0 ? `$${((load.gross_amount || 0) / load.loaded_miles).toFixed(2)}/mi` : '—'}
+                        </td>
+                        <td className="px-4 py-3 text-right tabular-nums text-slate-600 dark:text-slate-400 text-xs">
+                          {rateLabel(settings)}
+                        </td>
                         <td className="px-4 py-3 text-right tabular-nums font-semibold text-green-600 dark:text-green-400">{formatCurrency(calculateEarnings(load, settings))}</td>
                         <td className="px-4 py-3 text-center">
                           <Badge variant={load.status === 'Delivered' ? 'success' : 'warning'}>{load.status || 'Pending'}</Badge>
                         </td>
                         <td className="px-4 py-3 text-right text-slate-500 dark:text-slate-400 whitespace-nowrap text-xs">
-                          {load.pickup_date ? moment(load.pickup_date).format('MMM D') : '—'}
+                          <div>PU: {load.pickup_date ? moment(load.pickup_date).format('MM/DD/YYYY') : '—'}</div>
+                          <div>DO: {load.delivery_date ? moment(load.delivery_date).format('MM/DD/YYYY') : '—'}</div>
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-1 justify-end">
