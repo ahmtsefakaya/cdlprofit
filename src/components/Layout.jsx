@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import AppSettings from '../api/entities/AppSettings';
 import { useAuth } from '../contexts/useAuth';
-import { auth } from '../api/auth';
+import { authService } from '../api/auth';
 
 const NAV_ITEMS = [
   { path: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -45,7 +45,7 @@ function NavLink({ item, onClick }) {
 
 function SidebarContent({ onNavClick }) {
   const { settings } = useSettings();
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const queryClient = useQueryClient();
 
   const darkModeMutation = useMutation({
@@ -70,8 +70,9 @@ function SidebarContent({ onNavClick }) {
     darkModeMutation.mutate(isDark);
   };
 
-  const handleLogout = () => {
-    auth.logout('/');
+  const handleLogout = async () => {
+    await authService.logout();
+    setUser(null);
   };
 
   return (

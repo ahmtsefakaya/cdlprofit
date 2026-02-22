@@ -1,12 +1,47 @@
-import base44 from '../base44Client';
+import { db, auth } from '../firebase';
+import {
+  collection, doc, getDocs, addDoc, updateDoc, deleteDoc, query, where, writeBatch,
+} from 'firebase/firestore';
+
+function getColRef() {
+  const uid = auth.currentUser?.uid;
+  if (!uid) throw new Error('User not authenticated');
+  return collection(db, 'users', uid, 'expenses');
+}
 
 const Expense = {
-  list: () => base44.entities.Expense.list(),
-  create: (data) => base44.entities.Expense.create(data),
-  update: (id, data) => base44.entities.Expense.update(id, data),
-  delete: (id) => base44.entities.Expense.delete(id),
-  bulkCreate: (arr) => base44.entities.Expense.bulkCreate(arr),
-  filter: (query) => base44.entities.Expense.filter(query),
+  list: async () => {
+    const snap = await getDocs(getColRef());
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  },
+  create: async (data) => {
+    const ref = await addDoc(getColRef(), { ...data, createdAt: new Date().toISOString() });
+    return { id: ref.id, ...data };
+  },
+  update: async (id, data) => {
+    await updateDoc(doc(db, 'users', auth.currentUser.uid, 'expenses', id), {
+      ...data, updatedAt: new Date().toISOString(),
+    });
+    return { id, ...data };
+  },
+  delete: async (id) => {
+    await deleteDoc(doc(db, 'users', auth.currentUser.uid, 'expenses', id));
+  },
+  bulkCreate: async (arr) => {
+    const batch = writeBatch(db);
+    const colRef = getColRef();
+    arr.forEach((data) => {
+      const ref = doc(colRef);
+      batch.set(ref, { ...data, createdAt: new Date().toISOString() });
+    });
+    await batch.commit();
+  },
+  filter: async (queryObj) => {
+    const constraints = Object.entries(queryObj).map(([k, v]) => where(k, '==', v));
+    const q = query(getColRef(), ...constraints);
+    const snap = await getDocs(q);
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  },
 };
 
 export default Expense;
