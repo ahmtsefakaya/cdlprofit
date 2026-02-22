@@ -65,10 +65,12 @@ export default function Analytics() {
       const map = {};
       for (const l of loads) {
         if (!l.pickup_date) continue;
-        const key = moment(l.pickup_date).format('MM/DD');
+        const key = moment(l.pickup_date).format('YYYY-MM-DD');
         map[key] = (map[key] || 0) + calculateEarnings(l, settings);
       }
-      return Object.entries(map).sort(([a], [b]) => a.localeCompare(b)).map(([date, value]) => ({ date, value }));
+      return Object.entries(map)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([date, value]) => ({ date: moment(date).format('MM/DD/YY'), value }));
     }
     if (timeframe === 'weekly') {
       return revenueByWeek(loads, settings).map(({ week, value }) => ({

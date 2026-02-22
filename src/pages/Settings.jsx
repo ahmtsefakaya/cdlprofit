@@ -130,6 +130,17 @@ export default function Settings() {
       const text = await pendingFile.text();
       const data = JSON.parse(text);
 
+      // Validate structure before deleting existing data
+      if (!data || typeof data !== 'object') {
+        throw new Error('Invalid file structure');
+      }
+      if (data.loads !== undefined && !Array.isArray(data.loads)) {
+        throw new Error('Invalid loads data');
+      }
+      if (data.expenses !== undefined && !Array.isArray(data.expenses)) {
+        throw new Error('Invalid expenses data');
+      }
+
       const [existingLoads, existingExpenses] = await Promise.all([
         Load.list(),
         Expense.list(),
