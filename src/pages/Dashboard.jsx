@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { DollarSign, Truck, Route, TrendingUp, Calendar, BarChart2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { StatCard } from '../components/trucking/StatCard';
 import { RecentLoadsTable } from '../components/trucking/RecentLoadsTable';
 import { useSettings } from '../components/trucking/useSettings';
@@ -22,6 +24,7 @@ function SkeletonCard() {
 
 export default function Dashboard() {
   const { settings } = useSettings();
+  const [rpmPeriod, setRpmPeriod] = useState('all');
 
   const { data: loads = [], isLoading: loadsLoading } = useQuery({
     queryKey: ['loads'],
@@ -44,6 +47,11 @@ export default function Dashboard() {
   const yearEarnings = yearLoads.reduce((s, l) => s + calculateEarnings(l, settings), 0);
 
   const metrics = calculateMetrics(loads, expenses, settings);
+
+  const rpmLoads = rpmPeriod === 'all' ? loads : filterByPeriod(loads, rpmPeriod, 'delivery_date');
+  const rpmMiles = rpmLoads.reduce((s, l) => s + (l.loaded_miles || 0), 0);
+  const rpmEarnings = rpmLoads.reduce((s, l) => s + calculateEarnings(l, settings), 0);
+  const avgRpm = rpmMiles > 0 ? rpmEarnings / rpmMiles : 0;
 
   if (loadsLoading) {
     return (
@@ -103,11 +111,32 @@ export default function Dashboard() {
           label="Total Trips"
           value={metrics.totalTrips.toLocaleString()}
         />
-        <StatCard
-          icon={BarChart2}
-          label="Avg $/Mile"
-          value={formatCurrency(metrics.avgPerMile)}
-        />
+        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:bg-slate-800 dark:border-slate-700">
+          <div className="flex items-start justify-between">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">Avg $/Mile</p>
+                <Select value={rpmPeriod} onValueChange={setRpmPeriod}>
+                  <SelectTrigger className="h-5 text-xs px-1.5 w-28 shrink-0">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Time</SelectItem>
+                    <SelectItem value="thisWeek">This Week</SelectItem>
+                    <SelectItem value="thisMonth">This Month</SelectItem>
+                    <SelectItem value="thisYear">This Year</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <p className="mt-2 text-2xl font-bold tabular-nums text-slate-900 dark:text-white">
+                {formatCurrency(avgRpm)}
+              </p>
+            </div>
+            <div className="rounded-lg p-2 bg-primary-50 dark:bg-slate-700 ml-2 shrink-0">
+              <BarChart2 className="h-5 w-5 text-primary-800 dark:text-blue-400" />
+            </div>
+          </div>
+        </div>
         <StatCard
           icon={DollarSign}
           label="Avg $/Trip"
