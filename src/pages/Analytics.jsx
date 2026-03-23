@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek';
 import {
   LineChart, Line, AreaChart, Area, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -15,6 +16,8 @@ import {
   formatCurrency,
 } from '../components/trucking/calcUtils';
 import Load from '../api/entities/Load';
+
+dayjs.extend(isoWeek);
 
 const COLORS = ['#1e3a5f', '#3b82f6', '#0ea5e9', '#06b6d4', '#6366f1', '#8b5cf6', '#ec4899'];
 
@@ -36,7 +39,7 @@ export default function Analytics() {
   const { settings } = useSettings();
   const [timeframe, setTimeframe] = useState('monthly');
 
-  const { data: loads = [], isLoading } = useQuery({
+  const { data: loads = [], isLoading, isError } = useQuery({
     queryKey: ['loads'],
     queryFn: () => Load.list(),
   });
@@ -45,9 +48,9 @@ export default function Analytics() {
   const totalRevenue = loads.reduce((s, l) => s + calculateEarnings(l, settings), 0);
 
   // Current vs previous period (month)
-  const now = moment();
-  const currentMonthLoads = loads.filter((l) => moment(l.pickup_date).isSame(now, 'month'));
-  const prevMonthLoads = loads.filter((l) => moment(l.pickup_date).isSame(now.clone().subtract(1, 'month'), 'month'));
+  const now = dayjs();
+  const currentMonthLoads = loads.filter((l) => dayjs(l.pickup_date).isSame(now, 'month'));
+  const prevMonthLoads = loads.filter((l) => dayjs(l.pickup_date).isSame(now.subtract(1, 'month'), 'month'));
   const currentMonthRevenue = currentMonthLoads.reduce((s, l) => s + calculateEarnings(l, settings), 0);
   const prevMonthRevenue = prevMonthLoads.reduce((s, l) => s + calculateEarnings(l, settings), 0);
   const periodChange = prevMonthRevenue > 0
@@ -65,21 +68,21 @@ export default function Analytics() {
       const map = {};
       for (const l of loads) {
         if (!l.pickup_date) continue;
-        const key = moment(l.pickup_date).format('YYYY-MM-DD');
+        const key = dayjs(l.pickup_date).format('YYYY-MM-DD');
         map[key] = (map[key] || 0) + calculateEarnings(l, settings);
       }
       return Object.entries(map)
         .sort(([a], [b]) => a.localeCompare(b))
-        .map(([date, value]) => ({ date: moment(date).format('MM/DD/YY'), value }));
+        .map(([date, value]) => ({ date: dayjs(date).format('MM/DD/YY'), value }));
     }
     if (timeframe === 'weekly') {
       return revenueByWeek(loads, settings).map(({ week, value }) => ({
-        date: moment(week).format('MMM D'),
+        date: dayjs(week).format('MMM D'),
         value,
       }));
     }
     return revenueByMonth(loads, settings).map(({ month, value }) => ({
-      date: moment(month, 'YYYY-MM').format('MMM YYYY'),
+      date: dayjs(month, 'YYYY-MM').format('MMM YYYY'),
       value,
     }));
   };
@@ -95,7 +98,7 @@ export default function Analytics() {
 
   if (isLoading) {
     return (
-      <div className="p-6 space-y-6">
+      <div className="p-3 sm:p-6 space-y-6">
         <div className="grid grid-cols-3 gap-4">
           {[...Array(3)].map((_, i) => (
             <div key={i} className="h-28 rounded-xl bg-slate-200 dark:bg-slate-700 animate-pulse" />
@@ -106,8 +109,19 @@ export default function Analytics() {
     );
   }
 
+  if (isError) {
+    return (
+      <div className="p-3 sm:p-6">
+        <div className="flex flex-col items-center justify-center py-20 text-red-500">
+          <p className="font-medium">Failed to load analytics data</p>
+          <p className="text-sm mt-1 text-slate-500">Please check your connection and try again.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-3 sm:p-6 space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Analytics</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Revenue insights and trends</p>

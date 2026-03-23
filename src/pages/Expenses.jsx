@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek';
+dayjs.extend(isoWeek);
 import { Plus, Pencil, Trash2, Receipt } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -79,9 +81,9 @@ export default function Expenses() {
     const matchCat = categoryFilter === 'all' || e.category === categoryFilter;
     if (!matchCat) return false;
     if (period === 'all') return true;
-    const date = moment(e.date);
-    const now = moment();
-    if (period === 'thisWeek') return date.isSame(now, 'isoWeek');
+    const date = dayjs(e.date);
+    const now = dayjs();
+    if (period === 'thisWeek') return date.isoWeek() === now.isoWeek() && date.isoWeekYear() === now.isoWeekYear();
     if (period === 'thisMonth') return date.isSame(now, 'month');
     if (period === 'thisYear') return date.isSame(now, 'year');
     return true;
@@ -95,7 +97,7 @@ export default function Expenses() {
     byCategory[e.category] = (byCategory[e.category] || 0) + (e.amount || 0);
   }
 
-  const sorted = [...filtered].sort((a, b) => moment(b.date).diff(moment(a.date)));
+  const sorted = [...filtered].sort((a, b) => dayjs(b.date).diff(dayjs(a.date)));
 
   const handleSave = (data) => {
     if (editExpense) {
@@ -106,7 +108,7 @@ export default function Expenses() {
   };
 
   return (
-    <div className="p-6 space-y-5">
+    <div className="p-3 sm:p-6 space-y-5">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Expenses</h1>
@@ -178,56 +180,88 @@ export default function Expenses() {
       {sorted.length > 0 && (
         <Card>
           <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-slate-200 dark:border-slate-700">
-                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Title</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Category</th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Amount</th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Date</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Notes</th>
-                    <th className="px-4 py-3" />
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-50 dark:divide-slate-700">
-                  {sorted.map((exp) => (
-                    <tr key={exp.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
-                      <td className="px-6 py-3 font-medium text-slate-900 dark:text-white">{exp.title}</td>
-                      <td className="px-4 py-3">
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${CATEGORY_COLORS[exp.category] || CATEGORY_COLORS.other}`}>
+              {/* Desktop table */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-slate-200 dark:border-slate-700">
+                      <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Title</th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Category</th>
+                      <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Amount</th>
+                      <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Date</th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Notes</th>
+                      <th className="px-4 py-3" />
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-50 dark:divide-slate-700">
+                    {sorted.map((exp) => (
+                      <tr key={exp.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
+                        <td className="px-6 py-3 font-medium text-slate-900 dark:text-white">{exp.title}</td>
+                        <td className="px-4 py-3">
+                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${CATEGORY_COLORS[exp.category] || CATEGORY_COLORS.other}`}>
+                            {exp.category}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-right font-semibold tabular-nums text-red-600 dark:text-red-400">
+                          -{formatCurrency(exp.amount)}
+                        </td>
+                        <td className="px-4 py-3 text-right text-slate-500 dark:text-slate-400 whitespace-nowrap text-xs">
+                          {exp.date ? dayjs(exp.date).format('MMM D, YYYY') : '—'}
+                        </td>
+                        <td className="px-4 py-3 text-slate-500 dark:text-slate-400 max-w-[200px] truncate">{exp.notes || '—'}</td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-1 justify-end">
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); setEditExpense(exp); setFormOpen(true); }}
+                              className="p-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-700"
+                            >
+                              <Pencil className="h-3.5 w-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); if (window.confirm('Delete this expense?')) deleteMutation.mutate(exp.id); }}
+                              className="p-1.5 rounded hover:bg-red-50 dark:hover:bg-red-900/30 text-slate-500 hover:text-red-600"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile cards */}
+              <div className="md:hidden divide-y divide-slate-100 dark:divide-slate-700">
+                {sorted.map((exp) => (
+                  <div key={exp.id} className="px-3 py-3 space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-sm text-slate-900 dark:text-white">{exp.title}</span>
+                        <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${CATEGORY_COLORS[exp.category] || CATEGORY_COLORS.other}`}>
                           {exp.category}
                         </span>
-                      </td>
-                      <td className="px-4 py-3 text-right font-semibold tabular-nums text-red-600 dark:text-red-400">
-                        -{formatCurrency(exp.amount)}
-                      </td>
-                      <td className="px-4 py-3 text-right text-slate-500 dark:text-slate-400 whitespace-nowrap text-xs">
-                        {exp.date ? moment(exp.date).format('MMM D, YYYY') : '—'}
-                      </td>
-                      <td className="px-4 py-3 text-slate-500 dark:text-slate-400 max-w-[200px] truncate">{exp.notes || '—'}</td>
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-1 justify-end">
-                          <button
-                            onClick={() => { setEditExpense(exp); setFormOpen(true); }}
-                            className="p-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-700"
-                          >
-                            <Pencil className="h-3.5 w-3.5" />
-                          </button>
-                          <button
-                            onClick={() => deleteMutation.mutate(exp.id)}
-                            className="p-1.5 rounded hover:bg-red-50 dark:hover:bg-red-900/30 text-slate-500 hover:text-red-600"
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <button type="button" onClick={(e) => { e.stopPropagation(); setEditExpense(exp); setFormOpen(true); }} className="p-1.5 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500">
+                          <Pencil className="h-3.5 w-3.5" />
+                        </button>
+                        <button type="button" onClick={(e) => { e.stopPropagation(); if (window.confirm('Delete this expense?')) deleteMutation.mutate(exp.id); }} className="p-1.5 rounded hover:bg-red-50 dark:hover:bg-red-900/30 text-slate-500 hover:text-red-600">
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-semibold tabular-nums text-red-600 dark:text-red-400">-{formatCurrency(exp.amount)}</span>
+                      <span className="text-slate-400">{exp.date ? dayjs(exp.date).format('MMM D, YYYY') : '—'}</span>
+                    </div>
+                    {exp.notes && <p className="text-xs text-slate-400 truncate">{exp.notes}</p>}
+                  </div>
+                ))}
+              </div>
+            </CardContent>
         </Card>
       )}
 

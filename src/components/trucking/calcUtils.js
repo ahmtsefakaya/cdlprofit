@@ -1,11 +1,25 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek';
+dayjs.extend(isoWeek);
 
 /**
- * Calculate earnings for a single load based on earning profile settings
+ * Calculate earnings for a single load.
+ *
+ * Uses ONLY the load's own earning snapshot — global settings never override.
+ * Loads without an earning_profile simply return their gross_amount.
  */
 export function calculateEarnings(load, settings) {
-  if (!settings) return load.gross_amount || 0;
-  const { earning_profile, rate_per_mile, percentage_rate } = settings;
+  // Only use the load's own earning snapshot — no global fallback
+  const profile = load?.earning_profile
+    ? {
+      earning_profile: load.earning_profile,
+      rate_per_mile: load.rate_per_mile ?? 0,
+      percentage_rate: load.percentage_rate ?? 0,
+    }
+    : null;
+
+  if (!profile) return load?.gross_amount || 0;
+  const { earning_profile, rate_per_mile, percentage_rate } = profile;
 
   switch (earning_profile) {
     case 'owner_operator':
@@ -23,6 +37,25 @@ export function calculateEarnings(load, settings) {
       return load.gross_amount || 0;
   }
 }
+
+/**
+ * Gross RPM: gross_amount ÷ (loaded_miles + deadhead_miles)
+ */
+export function calculateGrossRPM(load) {
+  const gross = load?.gross_amount || 0;
+  const totalMiles = (load?.loaded_miles || 0) + (load?.deadhead_miles || 0);
+  return totalMiles > 0 ? gross / totalMiles : 0;
+}
+
+/**
+ * My $/Mi: earning ÷ (loaded_miles + deadhead_miles)
+ */
+export function calculateMyPerMile(load, settings) {
+  const earning = calculateEarnings(load, settings);
+  const totalMiles = (load?.loaded_miles || 0) + (load?.deadhead_miles || 0);
+  return totalMiles > 0 ? earning / totalMiles : 0;
+}
+
 
 /**
  * Calculate aggregate metrics from loads and expenses arrays
@@ -72,7 +105,7 @@ export function revenueByMonth(loads, settings) {
   for (const load of loads) {
     const dateVal = load.delivery_date || load.pickup_date;
     if (!dateVal) continue;
-    const key = moment(dateVal).format('YYYY-MM');
+    const key = dayjs(dateVal).format('YYYY-MM');
     map[key] = (map[key] || 0) + calculateEarnings(load, settings);
   }
   return Object.entries(map)
@@ -88,7 +121,7 @@ export function revenueByYear(loads, settings) {
   for (const load of loads) {
     const dateVal = load.delivery_date || load.pickup_date;
     if (!dateVal) continue;
-    const key = moment(dateVal).format('YYYY');
+    const key = dayjs(dateVal).format('YYYY');
     map[key] = (map[key] || 0) + calculateEarnings(load, settings);
   }
   return Object.entries(map)
@@ -104,7 +137,7 @@ export function revenueByWeek(loads, settings) {
   for (const load of loads) {
     const dateVal = load.delivery_date || load.pickup_date;
     if (!dateVal) continue;
-    const key = moment(dateVal).startOf('isoWeek').format('YYYY-MM-DD');
+    const key = dayjs(dateVal).startOf('isoWeek').format('YYYY-MM-DD');
     map[key] = (map[key] || 0) + calculateEarnings(load, settings);
   }
   return Object.entries(map)
@@ -117,9 +150,9 @@ export function revenueByWeek(loads, settings) {
  * dateField: field name to use for date comparison (default: 'pickup_date')
  */
 export function filterByPeriod(loads, period, dateField = 'pickup_date') {
-  const now = moment();
+  const now = dayjs();
   return loads.filter((load) => {
-    const date = moment(load[dateField] || load.pickup_date);
+    const date = dayjs(load[dateField] || load.pickup_date);
     switch (period) {
       case 'today':
         return date.isSame(now, 'day');
