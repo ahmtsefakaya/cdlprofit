@@ -15,6 +15,35 @@ import Load from '../api/entities/Load';
 
 dayjs.extend(isoWeek);
 
+/** Target My $/mi average the driver wants to maintain per week */
+const TARGET_MY_PER_MILE = 0.70;
+
+/**
+ * Returns the minimum Gross RPM any individual load must achieve
+ * for the driver to earn at least TARGET_MY_PER_MILE after their cut.
+ * This is size-independent: works for 500 mi or 50,000 mi loads.
+ * Returns null when already at/above target or profile is per-mile.
+ */
+function calcTargetGrossRPM(weekMyPerMile, settings) {
+  if (weekMyPerMile >= TARGET_MY_PER_MILE) return null; // already meeting target
+
+  const profile = settings?.earning_profile;
+  const percentageRate = Number(settings?.percentage_rate) || 0;
+
+  if (profile === 'solo_per_mile' || profile === 'team_per_mile') return null;
+
+  if (
+    (profile === 'owner_operator' || profile === 'solo_percentage' || profile === 'team_percentage') &&
+    percentageRate > 0 && percentageRate < 100
+  ) {
+    // earning = gross × (pct/100)  →  gross = earning / (pct/100)
+    return TARGET_MY_PER_MILE / (percentageRate / 100);
+  }
+
+  // No profile — earnings = gross, 1:1
+  return TARGET_MY_PER_MILE;
+}
+
 function groupByWeek(loads) {
   const groups = {};
   for (const load of loads) {
@@ -268,27 +297,43 @@ export default function Loads() {
         const weekTotalMiles = weekMiles + weekDeadhead;
         const weekGrossRPM = weekTotalMiles > 0 ? weekGross / weekTotalMiles : 0;
         const weekMyPerMile = weekTotalMiles > 0 ? weekEarnings / weekTotalMiles : 0;
+        // ── What-if hint: minimum Gross RPM for any individual load to earn TARGET_MY_PER_MILE ──
+        const targetGrossRPM = calcTargetGrossRPM(weekMyPerMile, settings);
+        const isAboveTarget = weekTotalMiles > 0 && weekMyPerMile >= TARGET_MY_PER_MILE;
+
         return (
           <Card key={week.weekStart}>
-            <CardHeader className="pb-3 px-3 sm:px-6">
+            {/* ── Weekly summary header — distinct tinted background ── */}
+            <CardHeader className="pb-3 px-3 sm:px-6 rounded-t-xl bg-gradient-to-r from-slate-800 to-slate-700 dark:from-slate-900 dark:to-slate-800 border-b border-slate-600 dark:border-slate-700">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                <CardTitle className="text-sm font-semibold text-slate-600 dark:text-slate-300">
+                <CardTitle className="text-sm font-semibold text-slate-200">
                   {weekLabel(week.weekStart, week.weekEnd)}
                 </CardTitle>
-                <div className="grid grid-cols-3 sm:flex sm:items-center gap-2 sm:gap-4 text-xs text-slate-500 dark:text-slate-400">
+                <div className="grid grid-cols-3 sm:flex sm:items-center gap-2 sm:gap-4 text-xs text-slate-300">
                   <span>{week.loads.length} trips</span>
                   <span>{formatMiles(weekTotalMiles)} mi</span>
-                  <span className="font-medium text-slate-900 dark:text-white">
+                  <span className="font-medium text-white">
                     {formatCurrency(weekGross)}
                   </span>
-                  <span className="font-bold text-slate-700 dark:text-slate-200">
+                  <span className="font-bold text-slate-100">
                     RPM {formatCurrency(weekGrossRPM)}
                   </span>
-                  <span className="font-bold text-primary-800 dark:text-blue-400">
+                  <span className="font-bold text-blue-300">
                     {formatCurrency(weekEarnings)}
                   </span>
-                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
+                  <span className={`font-semibold ${isAboveTarget ? 'text-emerald-300' : 'text-amber-300'}`}>
                     My {formatCurrency(weekMyPerMile)}/mi
+                    {isAboveTarget && (
+                      <span className="ml-1 text-emerald-400" title="At or above your \$0.70/mi target!">✓</span>
+                    )}
+                    {targetGrossRPM !== null && (
+                      <span
+                        className="ml-2 inline-flex items-center gap-1 rounded-md bg-amber-500/20 border border-amber-500/40 px-2 py-0.5 text-[10px] font-semibold text-amber-200 whitespace-nowrap"
+                        title={`Any load with Gross RPM ≥ ${formatCurrency(targetGrossRPM)} earns you $${TARGET_MY_PER_MILE.toFixed(2)}/mi or more — regardless of load size.`}
+                      >
+                        → Load target ≥ {formatCurrency(targetGrossRPM)} Gross RPM
+                      </span>
+                    )}
                   </span>
                 </div>
               </div>
