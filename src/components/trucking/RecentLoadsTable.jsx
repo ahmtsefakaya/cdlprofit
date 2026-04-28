@@ -4,7 +4,7 @@ import { formatCurrency, formatMiles } from './calcUtils';
 
 export function RecentLoadsTable({ loads = [] }) {
   const sorted = [...loads]
-    .sort((a, b) => dayjs(b.delivery_date || b.pickup_date).diff(dayjs(a.delivery_date || a.pickup_date)))
+    .sort((a, b) => dayjs(b.pickup_date || b.delivery_date).diff(dayjs(a.pickup_date || a.delivery_date)))
     .slice(0, 5);
 
   if (sorted.length === 0) {

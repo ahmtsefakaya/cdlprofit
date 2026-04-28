@@ -46,7 +46,7 @@ function PeriodSelect({ value, onChange, options }) {
 function buildYears(loads) {
   const years = new Set([dayjs().year()]);
   for (const l of loads) {
-    const d = l.delivery_date || l.pickup_date;
+    const d = l.pickup_date || l.delivery_date;
     if (d) years.add(dayjs(d).year());
   }
   return [...years].sort((a, b) => b - a);
@@ -56,7 +56,7 @@ function buildYears(loads) {
 function buildMonths(loads) {
   const months = new Set([dayjs().format('YYYY-MM')]);
   for (const l of loads) {
-    const d = l.delivery_date || l.pickup_date;
+    const d = l.pickup_date || l.delivery_date;
     if (d) months.add(dayjs(d).format('YYYY-MM'));
   }
   return [...months].sort((a, b) => b.localeCompare(a));
@@ -66,7 +66,7 @@ function buildMonths(loads) {
 function buildWeeks(loads) {
   const weeks = new Set([dayjs().startOf('isoWeek').format('YYYY-MM-DD')]);
   for (const l of loads) {
-    const d = l.delivery_date || l.pickup_date;
+    const d = l.pickup_date || l.delivery_date;
     if (d) weeks.add(dayjs(d).startOf('isoWeek').format('YYYY-MM-DD'));
   }
   return [...weeks].sort((a, b) => b.localeCompare(a));
@@ -112,7 +112,7 @@ export default function Dashboard() {
   const dayOptions = useMemo(() => {
     const days = new Set([now.format('YYYY-MM-DD')]);
     for (const l of loads) {
-      const d = l.delivery_date || l.pickup_date;
+      const d = l.pickup_date || l.delivery_date;
       if (d) days.add(dayjs(d).format('YYYY-MM-DD'));
     }
     return [...days].sort((a, b) => b.localeCompare(a)).slice(0, 60).map((d) => ({
@@ -126,19 +126,19 @@ export default function Dashboard() {
     filteredLoads.reduce((s, l) => s + calculateEarnings(l, settings), 0);
 
   const todayLoads = loads.filter((l) => {
-    const d = l.delivery_date || l.pickup_date;
+    const d = l.pickup_date || l.delivery_date;
     return d && dayjs(d).format('YYYY-MM-DD') === selectedDay;
   });
   const weekLoads = loads.filter((l) => {
-    const d = l.delivery_date || l.pickup_date;
+    const d = l.pickup_date || l.delivery_date;
     return d && dayjs(d).startOf('isoWeek').format('YYYY-MM-DD') === selectedWeek;
   });
   const monthLoads = loads.filter((l) => {
-    const d = l.delivery_date || l.pickup_date;
+    const d = l.pickup_date || l.delivery_date;
     return d && dayjs(d).format('YYYY-MM') === selectedMonth;
   });
   const yearLoads = loads.filter((l) => {
-    const d = l.delivery_date || l.pickup_date;
+    const d = l.pickup_date || l.delivery_date;
     return d && dayjs(d).format('YYYY') === selectedYear;
   });
 
@@ -150,7 +150,7 @@ export default function Dashboard() {
   const metrics = calculateMetrics(loads, expenses, settings);
 
   const rpmLoads = rpmPeriod === 'all' ? loads : loads.filter((l) => {
-    const d = l.delivery_date || l.pickup_date;
+    const d = l.pickup_date || l.delivery_date;
     if (!d) return false;
     const date = dayjs(d);
     if (rpmPeriod === 'thisWeek') return date.startOf('isoWeek').format('YYYY-MM-DD') === now.startOf('isoWeek').format('YYYY-MM-DD');
@@ -167,7 +167,7 @@ export default function Dashboard() {
     if (periodKey === 'all') return list;
     const [type, val] = periodKey.split(':');
     return list.filter((l) => {
-      const d = l.delivery_date || l.pickup_date;
+      const d = l.pickup_date || l.delivery_date;
       if (!d) return false;
       const date = dayjs(d);
       if (type === 'year') return date.format('YYYY') === val;

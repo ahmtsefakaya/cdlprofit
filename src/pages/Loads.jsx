@@ -47,7 +47,7 @@ function calcTargetGrossRPM(weekMyPerMile, settings) {
 function groupByWeek(loads) {
   const groups = {};
   for (const load of loads) {
-    const dateToUse = load.delivery_date || load.pickup_date;
+    const dateToUse = load.pickup_date || load.delivery_date;
     const weekStart = dayjs(dateToUse).startOf('isoWeek').format('YYYY-MM-DD');
     if (!groups[weekStart]) {
       groups[weekStart] = {
@@ -58,7 +58,7 @@ function groupByWeek(loads) {
     groups[weekStart].loads.push(load);
     groups[weekStart].weekEnd = dayjs(weekStart).endOf('isoWeek').format('YYYY-MM-DD');
     groups[weekStart].loads.sort((a, b) =>
-      dayjs(b.delivery_date || b.pickup_date).diff(dayjs(a.delivery_date || a.pickup_date))
+      dayjs(b.pickup_date || b.delivery_date).diff(dayjs(a.pickup_date || a.delivery_date))
     );
   }
   return Object.values(groups).sort((a, b) => b.weekStart.localeCompare(a.weekStart));

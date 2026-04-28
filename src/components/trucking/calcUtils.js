@@ -103,7 +103,7 @@ export function revenueByBroker(loads, settings) {
 export function revenueByMonth(loads, settings) {
   const map = {};
   for (const load of loads) {
-    const dateVal = load.delivery_date || load.pickup_date;
+    const dateVal = load.pickup_date || load.delivery_date;
     if (!dateVal) continue;
     const key = dayjs(dateVal).format('YYYY-MM');
     map[key] = (map[key] || 0) + calculateEarnings(load, settings);
@@ -119,7 +119,7 @@ export function revenueByMonth(loads, settings) {
 export function revenueByYear(loads, settings) {
   const map = {};
   for (const load of loads) {
-    const dateVal = load.delivery_date || load.pickup_date;
+    const dateVal = load.pickup_date || load.delivery_date;
     if (!dateVal) continue;
     const key = dayjs(dateVal).format('YYYY');
     map[key] = (map[key] || 0) + calculateEarnings(load, settings);
@@ -135,7 +135,7 @@ export function revenueByYear(loads, settings) {
 export function revenueByWeek(loads, settings) {
   const map = {};
   for (const load of loads) {
-    const dateVal = load.delivery_date || load.pickup_date;
+    const dateVal = load.pickup_date || load.delivery_date;
     if (!dateVal) continue;
     const key = dayjs(dateVal).startOf('isoWeek').format('YYYY-MM-DD');
     map[key] = (map[key] || 0) + calculateEarnings(load, settings);
