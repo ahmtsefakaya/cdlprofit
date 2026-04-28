@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 const GEMINI_API_URL =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent';
 
 const SYSTEM_PROMPT = `You are a trucking rate confirmation parser.
 Extract the following fields from the text and return ONLY a valid JSON object — no markdown, no explanation, just raw JSON.
