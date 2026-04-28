@@ -62,7 +62,6 @@ export function useAIParse() {
             maxOutputTokens: 1024,
             responseMimeType: 'application/json',
           },
-          thinkingConfig: { thinkingBudget: 0 },
         }),
       });
 
