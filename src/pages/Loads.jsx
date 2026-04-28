@@ -19,12 +19,18 @@ dayjs.extend(isoWeek);
 const TARGET_MY_PER_MILE = 0.70;
 
 /**
- * Returns the minimum Gross RPM any individual load must achieve
- * for the driver to earn at least TARGET_MY_PER_MILE after their cut.
- * This is size-independent: works for 500 mi or 50,000 mi loads.
- * Returns null when already at/above target or profile is per-mile.
+ * Dynamic what-if: calculates the minimum Gross RPM the NEXT load needs
+ * to bring the weekly average My $/Mi up to TARGET_MY_PER_MILE.
+ *
+ * Uses the week's average load size (total miles / num loads) as the
+ * assumed size of the next load.
+ *
+ * Returns null when already at/above target, per-mile profile, or no data.
  */
-function calcTargetGrossRPM(weekMyPerMile, settings) {
+function calcTargetGrossRPM({ weekEarnings, weekTotalMiles, numLoads, settings }) {
+  if (weekTotalMiles <= 0 || numLoads <= 0) return null;
+
+  const weekMyPerMile = weekTotalMiles > 0 ? weekEarnings / weekTotalMiles : 0;
   if (weekMyPerMile >= TARGET_MY_PER_MILE) return null; // already meeting target
 
   const profile = settings?.earning_profile;
@@ -32,16 +38,29 @@ function calcTargetGrossRPM(weekMyPerMile, settings) {
 
   if (profile === 'solo_per_mile' || profile === 'team_per_mile') return null;
 
+  // Assume next load has the same average miles as this week's loads
+  const avgLoadMiles = weekTotalMiles / numLoads;
+
+  // How much total earning is needed after adding the next load
+  const newTotalMiles = weekTotalMiles + avgLoadMiles;
+  const neededTotalEarnings = TARGET_MY_PER_MILE * newTotalMiles;
+  const earningsDeficit = neededTotalEarnings - weekEarnings;
+
+  if (earningsDeficit <= 0) return null;
+
+  // Convert needed earnings to needed gross for this load
+  let neededGross;
   if (
     (profile === 'owner_operator' || profile === 'solo_percentage' || profile === 'team_percentage') &&
     percentageRate > 0 && percentageRate < 100
   ) {
-    // earning = gross × (pct/100)  →  gross = earning / (pct/100)
-    return TARGET_MY_PER_MILE / (percentageRate / 100);
+    neededGross = earningsDeficit / (percentageRate / 100);
+  } else {
+    neededGross = earningsDeficit; // 1:1
   }
 
-  // No profile — earnings = gross, 1:1
-  return TARGET_MY_PER_MILE;
+  // Convert gross to RPM (gross / miles)
+  return neededGross / avgLoadMiles;
 }
 
 function groupByWeek(loads) {
@@ -297,8 +316,10 @@ export default function Loads() {
         const weekTotalMiles = weekMiles + weekDeadhead;
         const weekGrossRPM = weekTotalMiles > 0 ? weekGross / weekTotalMiles : 0;
         const weekMyPerMile = weekTotalMiles > 0 ? weekEarnings / weekTotalMiles : 0;
-        // ── What-if hint: minimum Gross RPM for any individual load to earn TARGET_MY_PER_MILE ──
-        const targetGrossRPM = calcTargetGrossRPM(weekMyPerMile, settings);
+        // ── What-if hint: minimum Gross RPM the NEXT load needs to bring weekly avg to TARGET ──
+        const targetGrossRPM = calcTargetGrossRPM({
+          weekEarnings, weekTotalMiles, numLoads: week.loads.length, settings,
+        });
         const isAboveTarget = weekTotalMiles > 0 && weekMyPerMile >= TARGET_MY_PER_MILE;
 
         return (
@@ -324,14 +345,14 @@ export default function Loads() {
                   <span className={`font-semibold ${isAboveTarget ? 'text-emerald-300' : 'text-amber-300'}`}>
                     My {formatCurrency(weekMyPerMile)}/mi
                     {isAboveTarget && (
-                      <span className="ml-1 text-emerald-400" title="At or above your \$0.70/mi target!">✓</span>
+                      <span className="ml-1 text-emerald-400" title="At or above your $0.70/mi target!">✓</span>
                     )}
                     {targetGrossRPM !== null && (
                       <span
                         className="ml-2 inline-flex items-center gap-1 rounded-md bg-amber-500/20 border border-amber-500/40 px-2 py-0.5 text-[10px] font-semibold text-amber-200 whitespace-nowrap"
-                        title={`Any load with Gross RPM ≥ ${formatCurrency(targetGrossRPM)} earns you $${TARGET_MY_PER_MILE.toFixed(2)}/mi or more — regardless of load size.`}
+                        title={`Next load needs ≥ ${formatCurrency(targetGrossRPM)} Gross RPM to bring your weekly avg to $${TARGET_MY_PER_MILE.toFixed(2)}/mi (based on avg ${formatMiles(Math.round(weekTotalMiles / week.loads.length))} mi/load).`}
                       >
-                        → Load target ≥ {formatCurrency(targetGrossRPM)} Gross RPM
+                        → Next load ≥ {formatCurrency(targetGrossRPM)} RPM
                       </span>
                     )}
                   </span>
