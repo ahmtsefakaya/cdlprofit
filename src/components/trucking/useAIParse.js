@@ -59,8 +59,10 @@ export function useAIParse() {
           ],
           generationConfig: {
             temperature: 0.1,
-            maxOutputTokens: 512,
+            maxOutputTokens: 1024,
+            responseMimeType: 'application/json',
           },
+          thinkingConfig: { thinkingBudget: 0 },
         }),
       });
 
@@ -72,13 +74,11 @@ export function useAIParse() {
       const json = await response.json();
       const rawContent = json?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
 
-      // Strip markdown code fences if model wrapped in ```json ... ```
-      const cleaned = rawContent
-        .replace(/^```(?:json)?\s*/i, '')
-        .replace(/\s*```$/, '')
-        .trim();
+      // Robustly extract the first {...} JSON object from whatever the model returns
+      const match = rawContent.match(/\{[\s\S]*\}/);
+      if (!match) throw new Error('AI did not return a valid JSON object. Try pasting more text.');
 
-      const parsed = JSON.parse(cleaned);
+      const parsed = JSON.parse(match[0]);
 
       // Sanitise: convert nulls to empty strings for string fields,
       // keep numbers as strings for controlled inputs
