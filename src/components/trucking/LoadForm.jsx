@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from '../ui/dialog';
@@ -7,6 +7,7 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { calculateEarnings, calculateGrossRPM, calculateMyPerMile, formatCurrency } from './calcUtils';
+import { useAIParse } from './useAIParse';
 
 const US_STATES = [
   'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA',
@@ -102,6 +103,13 @@ export function LoadForm({ open, onClose, onSave, initialData, settings, isSavin
   const [form, setForm] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
 
+  // AI Parse state
+  const { parse, isParsing } = useAIParse();
+  const [rawText, setRawText] = useState('');
+  const [aiError, setAiError] = useState('');
+  const [highlightedFields, setHighlightedFields] = useState({});
+  const highlightTimer = useRef(null);
+
   useEffect(() => {
     if (!open) return;
     if (initialData) {
@@ -125,9 +133,37 @@ export function LoadForm({ open, onClose, onSave, initialData, settings, isSavin
       });
     }
     setErrors({});
+    setRawText('');
+    setAiError('');
+    setHighlightedFields({});
   }, [open, initialData, settings]);
 
   const set = (field, value) => setForm((f) => ({ ...f, [field]: value }));
+
+  const handleAIParse = async () => {
+    setAiError('');
+    try {
+      const parsed = await parse(rawText);
+      if (!parsed || Object.keys(parsed).length === 0) {
+        setAiError('AI could not extract any fields. Try pasting more text.');
+        return;
+      }
+      // Apply parsed values to form (only non-empty values)
+      setForm((f) => ({ ...f, ...parsed }));
+      // Highlight filled fields briefly
+      setHighlightedFields(Object.fromEntries(Object.keys(parsed).map((k) => [k, true])));
+      clearTimeout(highlightTimer.current);
+      highlightTimer.current = setTimeout(() => setHighlightedFields({}), 2000);
+    } catch (err) {
+      setAiError(err.message || 'AI parsing failed.');
+    }
+  };
+
+  // CSS class helper — adds green ring when field was just AI-filled
+  const hl = (field) =>
+    highlightedFields[field]
+      ? 'ring-2 ring-emerald-400 dark:ring-emerald-500 transition-all'
+      : '';
 
   const isPerMile = form.earning_profile === 'solo_per_mile' || form.earning_profile === 'team_per_mile';
   const isPercentage = form.earning_profile === 'owner_operator' || form.earning_profile === 'solo_percentage' || form.earning_profile === 'team_percentage';
@@ -179,31 +215,72 @@ export function LoadForm({ open, onClose, onSave, initialData, settings, isSavin
           <DialogTitle>{initialData ? 'Edit Load' : 'Add New Load'}</DialogTitle>
         </DialogHeader>
 
+        {/* ── AI Auto-Fill Panel (only on Add mode) ── */}
+        {!initialData && (
+          <div className="rounded-xl border border-violet-200 bg-violet-50 dark:bg-violet-950/30 dark:border-violet-800/60 p-4 space-y-3">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">✨</span>
+              <div>
+                <p className="text-sm font-semibold text-violet-800 dark:text-violet-300">AI Auto-Fill</p>
+                <p className="text-xs text-violet-600 dark:text-violet-400">Rate confirmation metnini yapıştır, AI formu otomatik doldursun</p>
+              </div>
+            </div>
+            <textarea
+              className="w-full rounded-lg border border-violet-200 dark:border-violet-700 bg-white dark:bg-slate-900 text-sm text-slate-700 dark:text-slate-300 placeholder:text-slate-400 p-3 min-h-[90px] resize-y focus:outline-none focus:ring-2 focus:ring-violet-400 dark:focus:ring-violet-500"
+              placeholder="Rate confirmation metnini buraya yapıştır…
+(Load #, broker adı, pickup/delivery adresleri, mil, tutar, tarihler)"
+              value={rawText}
+              onChange={(e) => setRawText(e.target.value)}
+            />
+            {aiError && (
+              <p className="text-xs text-red-500 dark:text-red-400">⚠ {aiError}</p>
+            )}
+            <Button
+              type="button"
+              onClick={handleAIParse}
+              disabled={!rawText.trim() || isParsing}
+              className="gap-2 bg-violet-600 hover:bg-violet-700 text-white text-sm"
+            >
+              {isParsing ? (
+                <>
+                  <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                  </svg>
+                  Parsing…
+                </>
+              ) : (
+                <>✨ Parse with AI</>
+              )}
+            </Button>
+          </div>
+        )}
+
         <div className="grid grid-cols-2 gap-4 py-2">
           {/* Load ID */}
           <div className="col-span-2 sm:col-span-1">
             <Label htmlFor="load_id">Load ID *</Label>
-            <Input id="load_id" value={form.load_id} onChange={(e) => set('load_id', e.target.value)} className="mt-1" />
+            <Input id="load_id" value={form.load_id} onChange={(e) => set('load_id', e.target.value)} className={`mt-1 ${hl('load_id')}`} />
             {errors.load_id && <p className="mt-1 text-xs text-red-500">{errors.load_id}</p>}
           </div>
 
           {/* Broker */}
           <div className="col-span-2 sm:col-span-1">
             <Label htmlFor="broker_name">Broker Name *</Label>
-            <Input id="broker_name" value={form.broker_name} onChange={(e) => set('broker_name', e.target.value)} className="mt-1" />
+            <Input id="broker_name" value={form.broker_name} onChange={(e) => set('broker_name', e.target.value)} className={`mt-1 ${hl('broker_name')}`} />
             {errors.broker_name && <p className="mt-1 text-xs text-red-500">{errors.broker_name}</p>}
           </div>
 
           {/* Pickup */}
           <div>
             <Label htmlFor="pickup_city">Pickup City *</Label>
-            <Input id="pickup_city" value={form.pickup_city} onChange={(e) => set('pickup_city', e.target.value)} className="mt-1" />
+            <Input id="pickup_city" value={form.pickup_city} onChange={(e) => set('pickup_city', e.target.value)} className={`mt-1 ${hl('pickup_city')}`} />
             {errors.pickup_city && <p className="mt-1 text-xs text-red-500">{errors.pickup_city}</p>}
           </div>
           <div>
             <Label>Pickup State *</Label>
             <Select value={form.pickup_state} onValueChange={(v) => set('pickup_state', v)}>
-              <SelectTrigger className="mt-1"><SelectValue placeholder="State" /></SelectTrigger>
+              <SelectTrigger className={`mt-1 ${hl('pickup_state')}`}><SelectValue placeholder="State" /></SelectTrigger>
               <SelectContent>{US_STATES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
             </Select>
             {errors.pickup_state && <p className="mt-1 text-xs text-red-500">{errors.pickup_state}</p>}
@@ -212,13 +289,13 @@ export function LoadForm({ open, onClose, onSave, initialData, settings, isSavin
           {/* Delivery */}
           <div>
             <Label htmlFor="delivery_city">Delivery City *</Label>
-            <Input id="delivery_city" value={form.delivery_city} onChange={(e) => set('delivery_city', e.target.value)} className="mt-1" />
+            <Input id="delivery_city" value={form.delivery_city} onChange={(e) => set('delivery_city', e.target.value)} className={`mt-1 ${hl('delivery_city')}`} />
             {errors.delivery_city && <p className="mt-1 text-xs text-red-500">{errors.delivery_city}</p>}
           </div>
           <div>
             <Label>Delivery State *</Label>
             <Select value={form.delivery_state} onValueChange={(v) => set('delivery_state', v)}>
-              <SelectTrigger className="mt-1"><SelectValue placeholder="State" /></SelectTrigger>
+              <SelectTrigger className={`mt-1 ${hl('delivery_state')}`}><SelectValue placeholder="State" /></SelectTrigger>
               <SelectContent>{US_STATES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
             </Select>
             {errors.delivery_state && <p className="mt-1 text-xs text-red-500">{errors.delivery_state}</p>}
@@ -227,18 +304,18 @@ export function LoadForm({ open, onClose, onSave, initialData, settings, isSavin
           {/* Dates */}
           <div>
             <Label htmlFor="pickup_date">Pickup Date *</Label>
-            <Input id="pickup_date" type="date" value={form.pickup_date} onChange={(e) => set('pickup_date', e.target.value)} className="mt-1" />
+            <Input id="pickup_date" type="date" value={form.pickup_date} onChange={(e) => set('pickup_date', e.target.value)} className={`mt-1 ${hl('pickup_date')}`} />
             {errors.pickup_date && <p className="mt-1 text-xs text-red-500">{errors.pickup_date}</p>}
           </div>
           <div>
             <Label htmlFor="delivery_date">Delivery Date</Label>
-            <Input id="delivery_date" type="date" value={form.delivery_date ?? ''} onChange={(e) => set('delivery_date', e.target.value)} className="mt-1" />
+            <Input id="delivery_date" type="date" value={form.delivery_date ?? ''} onChange={(e) => set('delivery_date', e.target.value)} className={`mt-1 ${hl('delivery_date')}`} />
           </div>
 
           {/* Miles */}
           <div>
             <Label htmlFor="loaded_miles">Loaded Miles *</Label>
-            <Input id="loaded_miles" type="number" min="0" value={form.loaded_miles} onChange={(e) => set('loaded_miles', e.target.value)} className="mt-1" />
+            <Input id="loaded_miles" type="number" min="0" value={form.loaded_miles} onChange={(e) => set('loaded_miles', e.target.value)} className={`mt-1 ${hl('loaded_miles')}`} />
             {errors.loaded_miles && <p className="mt-1 text-xs text-red-500">{errors.loaded_miles}</p>}
           </div>
           <div>
@@ -249,7 +326,7 @@ export function LoadForm({ open, onClose, onSave, initialData, settings, isSavin
           {/* Gross Amount */}
           <div>
             <Label htmlFor="gross_amount">Gross Amount ($) *</Label>
-            <Input id="gross_amount" type="number" min="0" step="0.01" value={form.gross_amount} onChange={(e) => set('gross_amount', e.target.value)} className="mt-1" />
+            <Input id="gross_amount" type="number" min="0" step="0.01" value={form.gross_amount} onChange={(e) => set('gross_amount', e.target.value)} className={`mt-1 ${hl('gross_amount')}`} />
             {errors.gross_amount && <p className="mt-1 text-xs text-red-500">{errors.gross_amount}</p>}
           </div>
 
