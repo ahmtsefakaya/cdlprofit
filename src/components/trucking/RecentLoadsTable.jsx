@@ -47,7 +47,7 @@ export function RecentLoadsTable({ loads = [] }) {
                 </Badge>
               </td>
               <td className="py-3 text-right text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                {load.delivery_date ? dayjs(load.delivery_date).format('MMM D, YYYY') : '—'}
+                {load.delivery_date ? dayjs(load.delivery_date).format('MM/DD/YYYY') : '—'}
               </td>
             </tr>
           ))}

@@ -206,7 +206,7 @@ export default function Expenses() {
                           -{formatCurrency(exp.amount)}
                         </td>
                         <td className="px-4 py-3 text-right text-slate-500 dark:text-slate-400 whitespace-nowrap text-xs">
-                          {exp.date ? dayjs(exp.date).format('MMM D, YYYY') : '—'}
+                          {exp.date ? dayjs(exp.date).format('MM/DD/YYYY') : '—'}
                         </td>
                         <td className="px-4 py-3 text-slate-500 dark:text-slate-400 max-w-[200px] truncate">{exp.notes || '—'}</td>
                         <td className="px-4 py-3">
@@ -255,7 +255,7 @@ export default function Expenses() {
                     </div>
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-semibold tabular-nums text-red-600 dark:text-red-400">-{formatCurrency(exp.amount)}</span>
-                      <span className="text-slate-400">{exp.date ? dayjs(exp.date).format('MMM D, YYYY') : '—'}</span>
+                      <span className="text-slate-400">{exp.date ? dayjs(exp.date).format('MM/DD/YYYY') : '—'}</span>
                     </div>
                     {exp.notes && <p className="text-xs text-slate-400 truncate">{exp.notes}</p>}
                   </div>

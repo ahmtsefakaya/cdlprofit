@@ -78,8 +78,8 @@ function weekLabel(weekStart) {
   const e = s.endOf('isoWeek');
   const current = dayjs().startOf('isoWeek').format('YYYY-MM-DD');
   const prefix = weekStart === current ? 'This Week · ' : '';
-  if (s.month() === e.month()) return `${prefix}${s.format('MMM D')} – ${e.format('D, YYYY')}`;
-  return `${prefix}${s.format('MMM D')} – ${e.format('MMM D, YYYY')}`;
+  if (s.month() === e.month()) return `${prefix}${s.format('MM/DD')} – ${e.format('MM/DD/YYYY')}`;
+  return `${prefix}${s.format('MM/DD')} – ${e.format('MM/DD/YYYY')}`;
 }
 
 export default function Dashboard() {
@@ -107,7 +107,7 @@ export default function Dashboard() {
 
   // Dynamic option lists built from actual load data
   const yearOptions = useMemo(() => buildYears(loads).map((y) => ({ value: String(y), label: String(y) === String(now.year()) ? `${y} (Current)` : String(y) })), [loads]);
-  const monthOptions = useMemo(() => buildMonths(loads).map((m) => ({ value: m, label: dayjs(m + '-01').format('MMM YYYY') + (m === now.format('YYYY-MM') ? ' (Current)' : '') })), [loads]);
+  const monthOptions = useMemo(() => buildMonths(loads).map((m) => ({ value: m, label: dayjs(m + '-01').format('MM/YYYY') + (m === now.format('YYYY-MM') ? ' (Current)' : '') })), [loads]);
   const weekOptions = useMemo(() => buildWeeks(loads).map((w) => ({ value: w, label: weekLabel(w) })), [loads]);
   const dayOptions = useMemo(() => {
     const days = new Set([now.format('YYYY-MM-DD')]);
@@ -117,7 +117,7 @@ export default function Dashboard() {
     }
     return [...days].sort((a, b) => b.localeCompare(a)).slice(0, 60).map((d) => ({
       value: d,
-      label: dayjs(d).format('MMM D, YYYY') + (d === now.format('YYYY-MM-DD') ? ' (Today)' : ''),
+      label: dayjs(d).format('MM/DD/YYYY') + (d === now.format('YYYY-MM-DD') ? ' (Today)' : ''),
     }));
   }, [loads]);
 
@@ -182,9 +182,9 @@ export default function Dashboard() {
   const periodOptions = useMemo(() => {
     const opts = [{ value: 'all', label: 'All Time' }];
     yearOptions.forEach((y) => opts.push({ value: `year:${y.value}`, label: y.value === String(now.year()) ? `${y.value} (Year)` : y.value }));
-    monthOptions.forEach((m) => opts.push({ value: `month:${m.value}`, label: dayjs(m.value + '-01').format('MMM YYYY') }));
-    weekOptions.forEach((w) => opts.push({ value: `week:${w.value}`, label: `Wk ${dayjs(w.value).format('MMM D')}` }));
-    dayOptions.slice(0, 30).forEach((d) => opts.push({ value: `day:${d.value}`, label: dayjs(d.value).format('MMM D, YYYY') }));
+    monthOptions.forEach((m) => opts.push({ value: `month:${m.value}`, label: dayjs(m.value + '-01').format('MM/YYYY') }));
+    weekOptions.forEach((w) => opts.push({ value: `week:${w.value}`, label: `Wk ${dayjs(w.value).format('MM/DD')}` }));
+    dayOptions.slice(0, 30).forEach((d) => opts.push({ value: `day:${d.value}`, label: dayjs(d.value).format('MM/DD/YYYY') }));
     return opts;
   }, [yearOptions, monthOptions, weekOptions, dayOptions]);
 

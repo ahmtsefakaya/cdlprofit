@@ -73,16 +73,16 @@ export default function Analytics() {
       }
       return Object.entries(map)
         .sort(([a], [b]) => a.localeCompare(b))
-        .map(([date, value]) => ({ date: dayjs(date).format('MM/DD/YY'), value }));
+        .map(([date, value]) => ({ date: dayjs(date).format('MM/DD/YYYY'), value }));
     }
     if (timeframe === 'weekly') {
       return revenueByWeek(loads, settings).map(({ week, value }) => ({
-        date: dayjs(week).format('MMM D'),
+        date: dayjs(week).format('MM/DD'),
         value,
       }));
     }
     return revenueByMonth(loads, settings).map(({ month, value }) => ({
-      date: dayjs(month, 'YYYY-MM').format('MMM YYYY'),
+      date: dayjs(month, 'YYYY-MM').format('MM/YYYY'),
       value,
     }));
   };

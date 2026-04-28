@@ -86,9 +86,9 @@ function weekLabel(weekStart, weekEnd) {
   const s = dayjs(weekStart);
   const e = dayjs(weekEnd);
   if (s.month() === e.month()) {
-    return `${s.format('MMM D')} – ${e.format('D, YYYY')}`;
+    return `${s.format('MM/DD')} – ${e.format('MM/DD/YYYY')}`;
   }
-  return `${s.format('MMM D')} – ${e.format('MMM D, YYYY')}`;
+  return `${s.format('MM/DD')} – ${e.format('MM/DD/YYYY')}`;
 }
 
 export default function Loads() {
