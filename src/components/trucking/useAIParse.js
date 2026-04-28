@@ -3,7 +3,12 @@ import { useState } from 'react';
 const GEMINI_API_URL =
   'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
-const SYSTEM_PROMPT = `You are a trucking rate confirmation parser.
+function buildPrompt() {
+  const today = new Date().toISOString().split('T')[0]; // e.g. 2026-04-28
+  const year = new Date().getFullYear();
+  return `You are a trucking rate confirmation parser.
+Today's date is ${today}. The current year is ${year}.
+
 Extract the following fields from the text and return ONLY a valid JSON object — no markdown, no explanation, just raw JSON.
 
 Rules:
@@ -13,13 +18,14 @@ Rules:
 - pickup_state: 2-letter US state abbreviation for pickup (string).
 - delivery_city: ONLY the city name, no state, no zip, no street address (string).
 - delivery_state: 2-letter US state abbreviation for delivery (string).
-- pickup_date: Pickup date in YYYY-MM-DD format. If not found, null.
-- delivery_date: Delivery date in YYYY-MM-DD format. If not found, null.
+- pickup_date: Pickup date in YYYY-MM-DD format. If the year is not specified in the text, use ${year}. If not found at all, null.
+- delivery_date: Delivery date in YYYY-MM-DD format. If the year is not specified in the text, use ${year}. If not found at all, null.
 - loaded_miles: Number of loaded/billable miles as a plain number (no commas, no units). If not found, null.
 - gross_amount: Total rate/gross pay as a plain number (no $ sign, no commas). If not found, null.
 
 If a field cannot be found, set it to null.
 Return ONLY the JSON object, nothing else.`;
+}
 
 /**
  * useAIParse — sends raw rate confirmation text to Gemini and returns parsed load fields.
@@ -52,7 +58,7 @@ export function useAIParse() {
             {
               parts: [
                 {
-                  text: `${SYSTEM_PROMPT}\n\n---\n\n${rawText.trim()}`,
+                  text: `${buildPrompt()}\n\n---\n\n${rawText.trim()}`,
                 },
               ],
             },
