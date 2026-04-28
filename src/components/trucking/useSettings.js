@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import AppSettings from '../../api/entities/AppSettings';
+import { useFirestoreSync } from '../../lib/useFirestoreQuery';
 
 const DEFAULT_SETTINGS = {
   earning_profile: 'owner_operator',
@@ -11,6 +12,9 @@ const DEFAULT_SETTINGS = {
 };
 
 export function useSettings() {
+  // Subscribe to real-time Firestore updates for settings
+  useFirestoreSync('settings', 'settings');
+
   const { data, isLoading, error } = useQuery({
     queryKey: ['settings'],
     queryFn: () => AppSettings.list(),

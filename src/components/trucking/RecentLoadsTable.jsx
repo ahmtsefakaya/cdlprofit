@@ -1,10 +1,10 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Badge } from '../ui/badge';
 import { formatCurrency, formatMiles } from './calcUtils';
 
 export function RecentLoadsTable({ loads = [] }) {
   const sorted = [...loads]
-    .sort((a, b) => moment(b.delivery_date || b.pickup_date).diff(moment(a.delivery_date || a.pickup_date)))
+    .sort((a, b) => dayjs(b.delivery_date || b.pickup_date).diff(dayjs(a.delivery_date || a.pickup_date)))
     .slice(0, 5);
 
   if (sorted.length === 0) {
@@ -47,7 +47,7 @@ export function RecentLoadsTable({ loads = [] }) {
                 </Badge>
               </td>
               <td className="py-3 text-right text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                {load.delivery_date ? moment(load.delivery_date).format('MMM D, YYYY') : '—'}
+                {load.delivery_date ? dayjs(load.delivery_date).format('MMM D, YYYY') : '—'}
               </td>
             </tr>
           ))}

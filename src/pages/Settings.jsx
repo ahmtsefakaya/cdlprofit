@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Download, Upload, Save, AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -64,33 +64,60 @@ export default function Settings() {
 
   const saveMutation = useMutation({
     mutationFn: async (data) => {
-      try {
-        const existing = await AppSettings.list();
-        const payload = {
-          earning_profile: data.earning_profile || 'owner_operator',
-          rate_per_mile: parseFloat(data.rate_per_mile) || 0,
-          percentage_rate: parseFloat(data.percentage_rate) || 0,
-          dark_mode: Boolean(data.dark_mode),
-          driver_name: data.driver_name || '',
-          company_name: data.company_name || '',
-        };
-        if (existing && existing.length > 0) {
-          return await AppSettings.update(existing[0].id, payload);
-        }
-        return await AppSettings.create(payload);
-      } catch (error) {
-        console.error('Settings save error:', error);
-        throw error;
+      const payload = {
+        earning_profile: data.earning_profile || 'owner_operator',
+        rate_per_mile: parseFloat(data.rate_per_mile) || 0,
+        percentage_rate: parseFloat(data.percentage_rate) || 0,
+        dark_mode: Boolean(data.dark_mode),
+        driver_name: data.driver_name || '',
+        company_name: data.company_name || '',
+      };
+
+      // 1. Save settings
+      const existing = await AppSettings.list();
+      if (existing?.length > 0) {
+        await AppSettings.update(existing[0].id, payload);
+      } else {
+        await AppSettings.create(payload);
       }
+
+      // 2. Stamp all existing loads that don't have their own earning snapshot yet
+      //    (one-time migration — once stamped they are frozen forever)
+      const allLoads = await Load.list();
+      const unstamped = allLoads.filter((l) => !l.earning_profile);
+      if (unstamped.length > 0) {
+        const snapshot = {
+          earning_profile: payload.earning_profile,
+          rate_per_mile: payload.rate_per_mile,
+          percentage_rate: payload.percentage_rate,
+        };
+        // Batch update in groups of 500 (Firestore limit)
+        const { db, auth } = await import('../api/firebase');
+        const { writeBatch, doc } = await import('firebase/firestore');
+        const uid = auth.currentUser?.uid;
+        if (uid) {
+          for (let i = 0; i < unstamped.length; i += 500) {
+            const batch = writeBatch(db);
+            unstamped.slice(i, i + 500).forEach((l) => {
+              batch.update(doc(db, 'users', uid, 'loads', l.id), snapshot);
+            });
+            await batch.commit();
+          }
+        }
+        return unstamped.length; // return count for toast
+      }
+      return 0;
     },
-    onSuccess: () => {
+    onSuccess: (stampedCount) => {
       queryClient.invalidateQueries({ queryKey: ['settings'] });
+      queryClient.invalidateQueries({ queryKey: ['loads'] });
       if (form.dark_mode) {
         document.documentElement.classList.add('dark');
       } else {
         document.documentElement.classList.remove('dark');
       }
-      toast({ title: 'Settings saved successfully ✓' });
+      const extra = stampedCount > 0 ? ` (${stampedCount} old load(s) locked in)` : '';
+      toast({ title: `Settings saved ✓${extra}` });
     },
     onError: (error) => {
       console.error('Settings save failed:', error);
@@ -121,7 +148,7 @@ export default function Settings() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `truckflow-backup-${moment().format('YYYY-MM-DD')}.json`;
+      a.download = `truckflow-backup-${dayjs().format('YYYY-MM-DD')}.json`;
       a.click();
       URL.revokeObjectURL(url);
       toast({ title: 'Data exported successfully' });
@@ -193,7 +220,7 @@ export default function Settings() {
   const isOwnerOperator = form.earning_profile === 'owner_operator';
 
   return (
-    <div className="p-6 space-y-6 max-w-2xl">
+    <div className="p-3 sm:p-6 space-y-6 max-w-2xl">
       <div>
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Settings</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Configure your earning profile and preferences</p>

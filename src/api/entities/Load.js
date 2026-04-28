@@ -1,47 +1,14 @@
-import { db, auth } from '../firebase';
-import {
-  collection, doc, getDocs, addDoc, updateDoc, deleteDoc, query, where, writeBatch,
-} from 'firebase/firestore';
-
-function getColRef() {
-  const uid = auth.currentUser?.uid;
-  if (!uid) throw new Error('User not authenticated');
-  return collection(db, 'users', uid, 'loads');
-}
+import svc from '../firestoreService';
 
 const Load = {
-  list: async () => {
-    const snap = await getDocs(getColRef());
-    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-  },
-  create: async (data) => {
-    const ref = await addDoc(getColRef(), { ...data, createdAt: new Date().toISOString() });
-    return { id: ref.id, ...data };
-  },
-  update: async (id, data) => {
-    await updateDoc(doc(db, 'users', auth.currentUser.uid, 'loads', id), {
-      ...data, updatedAt: new Date().toISOString(),
-    });
-    return { id, ...data };
-  },
-  delete: async (id) => {
-    await deleteDoc(doc(db, 'users', auth.currentUser.uid, 'loads', id));
-  },
-  bulkCreate: async (arr) => {
-    const batch = writeBatch(db);
-    const colRef = getColRef();
-    arr.forEach((data) => {
-      const ref = doc(colRef);
-      batch.set(ref, { ...data, createdAt: new Date().toISOString() });
-    });
-    await batch.commit();
-  },
-  filter: async (queryObj) => {
-    const constraints = Object.entries(queryObj).map(([k, v]) => where(k, '==', v));
-    const q = query(getColRef(), ...constraints);
-    const snap = await getDocs(q);
-    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-  },
+  list: () => svc.list('loads'),
+  get: (id) => svc.get('loads', id),
+  create: (data) => svc.create('loads', data),
+  update: (id, data) => svc.update('loads', id, data),
+  delete: (id) => svc.delete('loads', id),
+  bulkCreate: (arr) => svc.bulkCreate('loads', arr),
+  filter: (filters) => svc.filter('loads', filters),
+  listPaginated: (opts) => svc.listPaginated('loads', opts),
 };
 
 export default Load;

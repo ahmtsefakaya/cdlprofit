@@ -9,6 +9,7 @@ import Settings from './pages/Settings';
 import { Toaster } from './components/ui/toaster';
 import { AuthProvider } from './contexts/authContext';
 import AuthGuard from './components/AuthGuard';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,17 +25,19 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
-          <AuthGuard>
-            <Layout>
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/loads" element={<Loads />} />
-                <Route path="/expenses" element={<Expenses />} />
-                <Route path="/analytics" element={<Analytics />} />
-                <Route path="/settings" element={<Settings />} />
-              </Routes>
-            </Layout>
-          </AuthGuard>
+          <ErrorBoundary>
+            <AuthGuard>
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/loads" element={<Loads />} />
+                  <Route path="/expenses" element={<Expenses />} />
+                  <Route path="/analytics" element={<Analytics />} />
+                  <Route path="/settings" element={<Settings />} />
+                </Routes>
+              </Layout>
+            </AuthGuard>
+          </ErrorBoundary>
         </AuthProvider>
         <Toaster />
       </BrowserRouter>

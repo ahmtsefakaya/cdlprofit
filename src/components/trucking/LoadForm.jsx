@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from '../ui/dialog';
@@ -6,12 +6,21 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { calculateEarnings, calculateGrossRPM, calculateMyPerMile, formatCurrency } from './calcUtils';
 
 const US_STATES = [
-  'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA',
-  'KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ',
-  'NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT',
-  'VA','WA','WV','WI','WY','DC',
+  'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA',
+  'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
+  'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT',
+  'VA', 'WA', 'WV', 'WI', 'WY', 'DC',
+];
+
+const PROFILES = [
+  { value: 'owner_operator', label: 'Owner Operator' },
+  { value: 'solo_per_mile', label: 'Solo Driver – Per Mile' },
+  { value: 'solo_percentage', label: 'Solo Driver – Percentage' },
+  { value: 'team_per_mile', label: 'Team Driver – Per Mile' },
+  { value: 'team_percentage', label: 'Team Driver – Percentage' },
 ];
 
 const EMPTY_FORM = {
@@ -28,20 +37,101 @@ const EMPTY_FORM = {
   gross_amount: '',
   notes: '',
   status: 'Pending',
+  // Per-load earning snapshot (pre-filled from Settings, editable)
+  earning_profile: '',
+  rate_per_mile: '',
+  percentage_rate: '',
 };
 
-export function LoadForm({ open, onClose, onSave, initialData, isSaving }) {
+/** Live preview panel — shows Gross RPM, Earning, My $/Mi */
+function LiveEarningPreview({ form }) {
+  const previewLoad = useMemo(() => ({
+    gross_amount: parseFloat(form.gross_amount) || 0,
+    loaded_miles: parseFloat(form.loaded_miles) || 0,
+    deadhead_miles: parseFloat(form.deadhead_miles) || 0,
+    earning_profile: form.earning_profile || undefined,
+    rate_per_mile: parseFloat(form.rate_per_mile) || 0,
+    percentage_rate: parseFloat(form.percentage_rate) || 0,
+  }), [form.gross_amount, form.loaded_miles, form.deadhead_miles, form.earning_profile, form.rate_per_mile, form.percentage_rate]);
+
+  const grossRPM = calculateGrossRPM(previewLoad);
+  const earning = calculateEarnings(previewLoad, null);
+  const myPerMile = calculateMyPerMile(previewLoad, null);
+  const totalMiles = previewLoad.loaded_miles + previewLoad.deadhead_miles;
+
+  const hasData = previewLoad.gross_amount > 0 || previewLoad.loaded_miles > 0;
+
+  if (!hasData) return null;
+
+  return (
+    <div className="mt-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 p-4">
+      <div className="grid grid-cols-3 gap-3 text-sm">
+        {totalMiles > 0 && (
+          <div>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Gross RPM</p>
+            <p className="font-bold text-slate-700 dark:text-slate-200 text-lg">{formatCurrency(grossRPM)}</p>
+          </div>
+        )}
+        <div>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Earning</p>
+          <p className="font-bold text-primary-800 dark:text-blue-400 text-lg">{formatCurrency(earning)}</p>
+        </div>
+        {totalMiles > 0 && (
+          <div>
+            <p className="text-xs text-slate-500 dark:text-slate-400">My $/Mi</p>
+            <p className="font-bold text-emerald-600 dark:text-emerald-400 text-lg">{formatCurrency(myPerMile)}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * LoadForm — Add / Edit a load.
+ *
+ * Props:
+ *  - open: boolean
+ *  - onClose: fn
+ *  - onSave: fn(payload)
+ *  - initialData: load object (edit mode) or null (add mode)
+ *  - settings: current global settings (used to pre-fill earning fields for new loads)
+ *  - isSaving: boolean
+ */
+export function LoadForm({ open, onClose, onSave, initialData, settings, isSaving }) {
   const [form, setForm] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (open) {
-      setForm(initialData ? { ...EMPTY_FORM, ...initialData } : EMPTY_FORM);
-      setErrors({});
+    if (!open) return;
+    if (initialData) {
+      // Edit mode — load the saved snapshot from the document
+      setForm({
+        ...EMPTY_FORM,
+        ...initialData,
+        loaded_miles: initialData.loaded_miles?.toString() ?? '',
+        deadhead_miles: initialData.deadhead_miles?.toString() ?? '',
+        gross_amount: initialData.gross_amount?.toString() ?? '',
+        rate_per_mile: initialData.rate_per_mile?.toString() ?? '',
+        percentage_rate: initialData.percentage_rate?.toString() ?? '',
+      });
+    } else {
+      // Add mode — pre-fill earning snapshot from current global settings
+      setForm({
+        ...EMPTY_FORM,
+        earning_profile: settings?.earning_profile ?? 'owner_operator',
+        rate_per_mile: settings?.rate_per_mile?.toString() ?? '',
+        percentage_rate: settings?.percentage_rate?.toString() ?? '',
+      });
     }
-  }, [open, initialData]);
+    setErrors({});
+  }, [open, initialData, settings]);
 
   const set = (field, value) => setForm((f) => ({ ...f, [field]: value }));
+
+  const isPerMile = form.earning_profile === 'solo_per_mile' || form.earning_profile === 'team_per_mile';
+  const isPercentage = form.earning_profile === 'owner_operator' || form.earning_profile === 'solo_percentage' || form.earning_profile === 'team_percentage';
+  const isOwnerOp = form.earning_profile === 'owner_operator';
 
   const validate = () => {
     const e = {};
@@ -74,13 +164,17 @@ export function LoadForm({ open, onClose, onSave, initialData, isSaving }) {
       gross_amount: parseFloat(form.gross_amount) || 0,
       notes: form.notes || '',
       status: form.status || 'Pending',
+      // Earning snapshot — saved with the load so global settings changes don't touch it
+      earning_profile: form.earning_profile || 'owner_operator',
+      rate_per_mile: parseFloat(form.rate_per_mile) || 0,
+      percentage_rate: parseFloat(form.percentage_rate) || 0,
     };
     onSave(payload);
   };
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{initialData ? 'Edit Load' : 'Add New Load'}</DialogTitle>
         </DialogHeader>
@@ -109,12 +203,8 @@ export function LoadForm({ open, onClose, onSave, initialData, isSaving }) {
           <div>
             <Label>Pickup State *</Label>
             <Select value={form.pickup_state} onValueChange={(v) => set('pickup_state', v)}>
-              <SelectTrigger className="mt-1">
-                <SelectValue placeholder="State" />
-              </SelectTrigger>
-              <SelectContent>
-                {US_STATES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-              </SelectContent>
+              <SelectTrigger className="mt-1"><SelectValue placeholder="State" /></SelectTrigger>
+              <SelectContent>{US_STATES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
             </Select>
             {errors.pickup_state && <p className="mt-1 text-xs text-red-500">{errors.pickup_state}</p>}
           </div>
@@ -128,12 +218,8 @@ export function LoadForm({ open, onClose, onSave, initialData, isSaving }) {
           <div>
             <Label>Delivery State *</Label>
             <Select value={form.delivery_state} onValueChange={(v) => set('delivery_state', v)}>
-              <SelectTrigger className="mt-1">
-                <SelectValue placeholder="State" />
-              </SelectTrigger>
-              <SelectContent>
-                {US_STATES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-              </SelectContent>
+              <SelectTrigger className="mt-1"><SelectValue placeholder="State" /></SelectTrigger>
+              <SelectContent>{US_STATES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
             </Select>
             {errors.delivery_state && <p className="mt-1 text-xs text-red-500">{errors.delivery_state}</p>}
           </div>
@@ -146,7 +232,7 @@ export function LoadForm({ open, onClose, onSave, initialData, isSaving }) {
           </div>
           <div>
             <Label htmlFor="delivery_date">Delivery Date</Label>
-            <Input id="delivery_date" type="date" value={form.delivery_date} onChange={(e) => set('delivery_date', e.target.value)} className="mt-1" />
+            <Input id="delivery_date" type="date" value={form.delivery_date ?? ''} onChange={(e) => set('delivery_date', e.target.value)} className="mt-1" />
           </div>
 
           {/* Miles */}
@@ -171,14 +257,65 @@ export function LoadForm({ open, onClose, onSave, initialData, isSaving }) {
           <div>
             <Label>Status</Label>
             <Select value={form.status} onValueChange={(v) => set('status', v)}>
-              <SelectTrigger className="mt-1">
-                <SelectValue />
-              </SelectTrigger>
+              <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="Pending">Pending</SelectItem>
                 <SelectItem value="Delivered">Delivered</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+
+          {/* ── Earning Profile Snapshot ── */}
+          <div className="col-span-2 border-t border-slate-200 dark:border-slate-700 pt-4 mt-2">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3">
+              Earning Profile <span className="font-normal normal-case">(saved with this load)</span>
+            </p>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2 sm:col-span-1">
+                <Label>Profile Type</Label>
+                <Select value={form.earning_profile} onValueChange={(v) => set('earning_profile', v)}>
+                  <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {PROFILES.map((p) => <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {isPerMile && (
+                <div>
+                  <Label htmlFor="rate_per_mile">Rate Per Mile ($)</Label>
+                  <Input
+                    id="rate_per_mile"
+                    type="number" min="0" step="0.01"
+                    value={form.rate_per_mile}
+                    onChange={(e) => set('rate_per_mile', e.target.value)}
+                    className="mt-1"
+                    placeholder="e.g. 0.55"
+                  />
+                </div>
+              )}
+
+              {isPercentage && (
+                <div>
+                  <Label htmlFor="percentage_rate">
+                    {isOwnerOp ? 'Dispatch Fee (%)' : 'Percentage Rate (%)'}
+                  </Label>
+                  <Input
+                    id="percentage_rate"
+                    type="number" min="0" max="100" step="0.1"
+                    value={form.percentage_rate}
+                    onChange={(e) => set('percentage_rate', e.target.value)}
+                    className="mt-1"
+                    placeholder={isOwnerOp ? 'e.g. 10' : 'e.g. 25'}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ── Live Preview ── */}
+          <div className="col-span-2">
+            <LiveEarningPreview form={form} />
           </div>
 
           {/* Notes */}
