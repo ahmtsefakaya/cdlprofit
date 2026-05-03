@@ -43,7 +43,10 @@ export function useAIParse() {
 
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     if (!apiKey) {
-      throw new Error('VITE_GEMINI_API_KEY is not set in your .env file.');
+      const msg = 'Gemini API key is not configured. Add VITE_GEMINI_API_KEY to your environment variables.';
+      console.warn('⚠', msg);
+      setError(msg);
+      return null;
     }
 
     setIsParsing(true);

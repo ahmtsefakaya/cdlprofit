@@ -210,7 +210,7 @@ export function LoadForm({ open, onClose, onSave, initialData, settings, isSavin
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent aria-describedby={undefined} className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{initialData ? 'Edit Load' : 'Add New Load'}</DialogTitle>
         </DialogHeader>
